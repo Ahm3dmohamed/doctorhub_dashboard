@@ -3,7 +3,10 @@ import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_typography.dart';
 import '../../core/constants/app_constants.dart';
 
-/// Primary gradient button with loading, disabled, and icon states
+/// Primary gradient button with loading, disabled, and icon states.
+///
+/// Safely handles both bounded (Column/padding) and unbounded (Row) parent
+/// contexts by checking layout constraints before applying [double.infinity].
 class PrimaryButton extends StatefulWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -70,9 +73,10 @@ class _PrimaryButtonState extends State<PrimaryButton>
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.97,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -98,85 +102,100 @@ class _PrimaryButtonState extends State<PrimaryButton>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: _onTapDown,
-      onTapUp: _onTapUp,
-      onTapCancel: _onTapCancel,
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: SizedBox(
-          width: widget.width ?? double.infinity,
-          height: widget.height,
-          child: AnimatedOpacity(
-            opacity: _isInteractable ? 1.0 : 0.6,
-            duration: AppConstants.animFast,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: _isInteractable
-                    ? AppColors.primaryGradient
-                    : const LinearGradient(
-                        colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                      ),
-                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-                boxShadow: _isInteractable
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.4),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ]
-                    : null,
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: _isInteractable ? widget.onPressed : null,
-                  borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-                  splashColor: Colors.white.withValues(alpha: 0.1),
-                  highlightColor: Colors.white.withValues(alpha: 0.05),
-                  child: Center(
-                    child: widget.isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              valueColor: AlwaysStoppedAnimation(Colors.white),
-                            ),
-                          )
-                        : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (widget.leadingIcon != null) ...[
-                                Icon(
-                                  widget.leadingIcon,
-                                  color: Colors.white,
-                                  size: widget.size._iconSize,
-                                ),
-                                const SizedBox(width: 8),
-                              ],
-                              Text(
-                                widget.label,
-                                style: widget.size._textStyle,
-                              ),
-                              if (widget.trailingIcon != null) ...[
-                                const SizedBox(width: 8),
-                                Icon(
-                                  widget.trailingIcon,
-                                  color: Colors.white,
-                                  size: widget.size._iconSize,
-                                ),
-                              ],
-                            ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double? effectiveWidth =
+            widget.width ?? (constraints.hasBoundedWidth ? double.infinity : null);
+
+        return GestureDetector(
+          onTapDown: _onTapDown,
+          onTapUp: _onTapUp,
+          onTapCancel: _onTapCancel,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: SizedBox(
+              width: effectiveWidth,
+              height: widget.height,
+              child: AnimatedOpacity(
+                opacity: _isInteractable ? 1.0 : 0.6,
+                duration: AppConstants.animFast,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: _isInteractable
+                        ? AppColors.primaryGradient
+                        : const LinearGradient(
+                            colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
                           ),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+                    boxShadow: _isInteractable
+                        ? [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.4),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: _isInteractable ? widget.onPressed : null,
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.radiusLg,
+                      ),
+                      splashColor: Colors.white.withValues(alpha: 0.1),
+                      highlightColor: Colors.white.withValues(alpha: 0.05),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Center(
+                          widthFactor: effectiveWidth == null ? 1.0 : null,
+                          child: widget.isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    valueColor: AlwaysStoppedAnimation(
+                                      Colors.white,
+                                    ),
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (widget.leadingIcon != null) ...[
+                                      Icon(
+                                        widget.leadingIcon,
+                                        color: Colors.white,
+                                        size: widget.size._iconSize,
+                                      ),
+                                      const SizedBox(width: 8),
+                                    ],
+                                    Text(
+                                      widget.label,
+                                      style: widget.size._textStyle,
+                                    ),
+                                    if (widget.trailingIcon != null) ...[
+                                      const SizedBox(width: 8),
+                                      Icon(
+                                        widget.trailingIcon,
+                                        color: Colors.white,
+                                        size: widget.size._iconSize,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -187,19 +206,22 @@ enum ButtonSize {
   lg;
 
   double get _iconSize => switch (this) {
-        ButtonSize.sm => 14,
-        ButtonSize.md => 16,
-        ButtonSize.lg => 18,
-      };
+    ButtonSize.sm => 14,
+    ButtonSize.md => 16,
+    ButtonSize.lg => 18,
+  };
 
   TextStyle get _textStyle => switch (this) {
-        ButtonSize.sm => AppTypography.buttonSm(color: Colors.white),
-        ButtonSize.md => AppTypography.buttonMd(color: Colors.white),
-        ButtonSize.lg => AppTypography.buttonLg(color: Colors.white),
-      };
+    ButtonSize.sm => AppTypography.buttonSm(color: Colors.white),
+    ButtonSize.md => AppTypography.buttonMd(color: Colors.white),
+    ButtonSize.lg => AppTypography.buttonLg(color: Colors.white),
+  };
 }
 
-/// Secondary (outlined) button
+/// Secondary (outlined) button.
+///
+/// Uses the same safe [LayoutBuilder] pattern as [PrimaryButton] to avoid
+/// [BoxConstraints] infinite-width assertions in unbounded parent widgets.
 class SecondaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -222,45 +244,54 @@ class SecondaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return SizedBox(
-      width: width ?? double.infinity,
-      height: height,
-      child: OutlinedButton(
-        onPressed: isLoading ? null : onPressed,
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-            width: 1.5,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-          ),
-          foregroundColor: isDark
-              ? AppColors.darkTextPrimary
-              : AppColors.lightTextPrimary,
-        ),
-        child: isLoading
-            ? SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation(
-                    isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  ),
-                ),
-              )
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (leadingIcon != null) ...[
-                    Icon(leadingIcon, size: 16),
-                    const SizedBox(width: 8),
-                  ],
-                  Text(label, style: AppTypography.buttonMd()),
-                ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double? effectiveWidth =
+            width ?? (constraints.hasBoundedWidth ? double.infinity : null);
+
+        return SizedBox(
+          width: effectiveWidth,
+          height: height,
+          child: OutlinedButton(
+            onPressed: isLoading ? null : onPressed,
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(
+                color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                width: 1.5,
               ),
-      ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+              ),
+              foregroundColor: isDark
+                  ? AppColors.darkTextPrimary
+                  : AppColors.lightTextPrimary,
+            ),
+            child: isLoading
+                ? SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation(
+                        isDark
+                            ? AppColors.darkTextPrimary
+                            : AppColors.lightTextPrimary,
+                      ),
+                    ),
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (leadingIcon != null) ...[
+                        Icon(leadingIcon, size: 16),
+                        const SizedBox(width: 8),
+                      ],
+                      Text(label, style: AppTypography.buttonMd()),
+                    ],
+                  ),
+          ),
+        );
+      },
     );
   }
 }
