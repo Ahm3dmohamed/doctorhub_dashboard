@@ -1,10 +1,18 @@
+/// DoctorHub — Exception Classes (Data Layer)
+///
+/// All exceptions are thrown exclusively in the data layer and converted
+/// into [Failure] objects at repository boundaries. Do NOT use exceptions
+/// in the domain or presentation layers.
 library;
 
-/// DoctorHub — Exception Classes (Data Layer)
-/// Exceptions are thrown in the data layer and caught to produce Failures
+// ─── Base Exception ────────────────────────────────────────────────────────────
 
+/// Base class for all DoctorHub data-layer exceptions.
 class AppException implements Exception {
+  /// Human-readable description of what went wrong.
   final String message;
+
+  /// Optional machine-readable error code (e.g. `'NOT_FOUND'`).
   final String? code;
 
   const AppException({required this.message, this.code});
@@ -13,8 +21,9 @@ class AppException implements Exception {
   String toString() => '$runtimeType: $message';
 }
 
-// ─── Network Exceptions ───────────────────────────────────────────────────────
+// ─── Network Exceptions ────────────────────────────────────────────────────────
 
+/// Thrown when the device has no internet connectivity.
 class NetworkException extends AppException {
   const NetworkException({
     super.message = 'No internet connection.',
@@ -22,6 +31,7 @@ class NetworkException extends AppException {
   });
 }
 
+/// Thrown when a request exceeds its allowed duration.
 class TimeoutException extends AppException {
   const TimeoutException({
     super.message = 'Request timed out.',
@@ -29,12 +39,14 @@ class TimeoutException extends AppException {
   });
 }
 
+/// Thrown when the server returns a non-2xx HTTP response.
 class ServerException extends AppException {
-  final int statusCode;
+  /// The HTTP status code returned by the server.
+  final int? statusCode;
 
   const ServerException({
     required super.message,
-    required this.statusCode,
+    this.statusCode,
     super.code,
   });
 
@@ -42,12 +54,14 @@ class ServerException extends AppException {
   String toString() => 'ServerException($statusCode): $message';
 }
 
-// ─── Auth Exceptions ──────────────────────────────────────────────────────────
+// ─── Auth Exceptions ───────────────────────────────────────────────────────────
 
+/// Base class for all authentication-related exceptions.
 class AuthException extends AppException {
   const AuthException({required super.message, super.code});
 }
 
+/// Thrown when the provided email/password pair is incorrect.
 class InvalidCredentialsException extends AuthException {
   const InvalidCredentialsException({
     super.message = 'Invalid email or password.',
@@ -55,6 +69,7 @@ class InvalidCredentialsException extends AuthException {
   });
 }
 
+/// Thrown when the user's session token is expired or missing.
 class UnauthorizedException extends AuthException {
   const UnauthorizedException({
     super.message = 'Session expired. Please sign in again.',
@@ -62,6 +77,7 @@ class UnauthorizedException extends AuthException {
   });
 }
 
+/// Thrown when the account has been locked due to too many failed attempts.
 class AccountLockedException extends AuthException {
   const AccountLockedException({
     super.message = 'Account has been locked.',
@@ -69,6 +85,7 @@ class AccountLockedException extends AuthException {
   });
 }
 
+/// Thrown when no account exists for the given email address.
 class EmailNotFoundException extends AuthException {
   const EmailNotFoundException({
     super.message = 'Email not found.',
@@ -76,6 +93,7 @@ class EmailNotFoundException extends AuthException {
   });
 }
 
+/// Thrown when a password-reset token has expired.
 class TokenExpiredException extends AuthException {
   const TokenExpiredException({
     super.message = 'Reset token has expired.',
@@ -83,8 +101,9 @@ class TokenExpiredException extends AuthException {
   });
 }
 
-// ─── Cache Exceptions ─────────────────────────────────────────────────────────
+// ─── Cache Exceptions ──────────────────────────────────────────────────────────
 
+/// Thrown when local storage read/write operations fail.
 class CacheException extends AppException {
   const CacheException({
     super.message = 'Local cache error.',
@@ -92,9 +111,11 @@ class CacheException extends AppException {
   });
 }
 
-// ─── Validation Exceptions ────────────────────────────────────────────────────
+// ─── Validation Exceptions ─────────────────────────────────────────────────────
 
+/// Thrown when request payload fails business-rule validation.
 class ValidationException extends AppException {
+  /// Field-level error messages keyed by field name.
   final Map<String, String>? fieldErrors;
 
   const ValidationException({

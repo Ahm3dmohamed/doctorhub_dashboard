@@ -8,16 +8,11 @@ import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
 
-/// Auth Repository Implementation
-/// Bridges the data layer (datasource) and domain layer (repository contract)
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
   final SharedPreferences _prefs;
 
-  const AuthRepositoryImpl(
-    this._remoteDataSource,
-    this._prefs,
-  );
+  const AuthRepositoryImpl(this._remoteDataSource, this._prefs);
 
   @override
   Future<Either<Failure, UserEntity>> login({
@@ -31,11 +26,9 @@ class AuthRepositoryImpl implements AuthRepository {
         password: password,
       );
 
-      // Cache user if rememberMe is enabled
       if (rememberMe) {
         await _cacheUser(user);
       } else {
-        // Always cache for session duration
         await _cacheUser(user);
       }
 
@@ -60,7 +53,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> forgotPassword({required String email}) async {
+  Future<Either<Failure, String>> forgotPassword({
+    required String email,
+  }) async {
     try {
       final message = await _remoteDataSource.forgotPassword(email: email);
       return Right(message);
@@ -135,8 +130,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return const Right(false);
     }
   }
-
-  // ─── Private Cache Helpers ────────────────────────────────────────────────
 
   Future<void> _cacheUser(UserModel user) async {
     await _prefs.setString(AppConstants.keyAuthToken, user.token);
