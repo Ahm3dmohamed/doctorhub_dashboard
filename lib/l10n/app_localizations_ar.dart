@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appName => 'دكتور هب';
+  String get appName => 'دكتور ';
 
   @override
   String get navDashboard => 'لوحة التحكم';
@@ -165,6 +165,41 @@ class AppLocalizationsAr extends AppLocalizations {
   String get valInvalidToken => 'رمز إعادة التعيين يجب أن يتكون من 6 أحرف';
 
   @override
+  String get authSuperAdmin => 'مدير النظام';
+
+  @override
+  String get authDoctor => 'طبيب';
+
+  @override
+  String get authClinicManager => 'مدير العيادة';
+
+  @override
+  String get authTheModernWayToManage =>
+      'الطريقة الحديثة لإدارة الرعاية الصحية';
+
+  @override
+  String get authHealthcare => 'الرعاية الصحية';
+
+  @override
+  String get authHealthcarePlatform => 'منصة الرعاية الصحية';
+
+  @override
+  String get authDoctorHubCentralizes =>
+      'دكتور هب يجمع سجلات المرضى والمواعيد والتحليلات للأطباء والعيادات والمسؤولين.';
+
+  @override
+  String get authRealTimeAnalytics => 'تحليلات في الوقت الحقيقي ورؤى';
+
+  @override
+  String get authPatientManagement => 'إدارة المرضى مبسطة';
+
+  @override
+  String get authSmartAppointment => 'جدولة مواعيد ذكية';
+
+  @override
+  String get authHippaCompliant => 'متوافقة مع HIPAA وآمنة';
+
+  @override
   String get authWelcomeBack => 'أهلاً بعودتك!';
 
   @override
@@ -220,6 +255,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authSelectRole => 'اختر دوراً للتعبئة السريعة:';
+
+  @override
+  String get authSecureLogin => 'تسجيل دخول آمن';
+
+  @override
+  String get authEmailAddress => 'عنوان البريد الإلكتروني';
+
+  @override
+  String get authProtectedByDoctorhub => 'محمي بواسطة دكتور هب';
+
+  @override
+  String get authPassword => 'كلمة المرور';
+
+  @override
+  String get authPasswordIncorrect => 'كلمة المرور غير صحيحة';
 
   @override
   String dashWelcome(String name) {
@@ -644,4 +694,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get reviewsNoFound => 'لم يتم العثور على تقييمات.';
+
+  @override
+  String get actNewPatient => 'تسجيل مريض جديد';
+
+  @override
+  String get actAptCompleted => 'إكتمل الكشف الطبي';
+
+  @override
+  String get actAptRescheduled => 'تم إعاده جدولة الموعد';
+
+  @override
+  String get actLabUploaded => 'رفع نتائج التحاليل';
+
+  @override
+  String get actSystemAlert => 'تنبيه بالنظام';
+
+  @override
+  String actTimeMinAgo(int count) {
+    return 'منذ $count دقيقة';
+  }
+
+  @override
+  String actTimeHrAgo(int count) {
+    return 'منذ ساعة';
+  }
+
+  @override
+  String actTimeHrsAgo(int count) {
+    return 'منذ $count ساعات';
+  }
 }

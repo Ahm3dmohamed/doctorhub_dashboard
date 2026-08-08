@@ -1,6 +1,7 @@
 import 'package:doctorhub_dashboard/app/theme/app_colors.dart';
 import 'package:doctorhub_dashboard/app/theme/app_typography.dart';
 import 'package:doctorhub_dashboard/core/constants/app_constants.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class LeftBrandingPanel extends StatelessWidget {
@@ -8,6 +9,7 @@ class LeftBrandingPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +38,7 @@ class LeftBrandingPanel extends StatelessWidget {
               ),
               const SizedBox(width: AppConstants.space2),
               Text(
-                'Healthcare Platform',
+                l10n.authHealthcarePlatform,
                 style: AppTypography.labelSm(color: AppColors.primaryLight),
               ),
             ],
@@ -49,9 +51,9 @@ class LeftBrandingPanel extends StatelessWidget {
           text: TextSpan(
             style: AppTypography.displayMd(color: Colors.white),
             children: [
-              const TextSpan(text: 'The modern way to\nmanage '),
+              TextSpan(text: l10n.authTheModernWayToManage),
               TextSpan(
-                text: 'healthcare',
+                text: l10n.authHealthcare,
                 style: AppTypography.displayMd().copyWith(
                   foreground: Paint()
                     ..shader = const LinearGradient(
@@ -66,7 +68,7 @@ class LeftBrandingPanel extends StatelessWidget {
         const SizedBox(height: AppConstants.space4),
 
         Text(
-          'DoctorHub centralizes patient records, appointments,\nand analytics for doctors, clinics, and administrators.',
+          l10n.authDoctorHubCentralizes,
           style: AppTypography.bodyLg(color: AppColors.darkTextSecondary),
         ),
 
@@ -74,10 +76,10 @@ class LeftBrandingPanel extends StatelessWidget {
 
         // Feature list
         ...[
-          (Icons.analytics_rounded, 'Real-time analytics & insights'),
-          (Icons.people_rounded, 'Patient management simplified'),
-          (Icons.calendar_month_rounded, 'Smart appointment scheduling'),
-          (Icons.security_rounded, 'HIPAA-compliant & secure'),
+          (Icons.analytics_rounded, l10n.authRealTimeAnalytics),
+          (Icons.people_rounded, l10n.authPatientManagement),
+          (Icons.calendar_month_rounded, l10n.authSmartAppointment),
+          (Icons.security_rounded, l10n.authHippaCompliant),
         ].map(
           (item) => Padding(
             padding: const EdgeInsets.only(bottom: AppConstants.space4),

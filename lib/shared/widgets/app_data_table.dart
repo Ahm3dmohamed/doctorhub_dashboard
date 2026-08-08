@@ -70,7 +70,6 @@ class AppDataTable<T> extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ─── Header Controls (Search + Filters + Action) ─────────────────────
           if (onSearchChanged != null ||
               filterWidget != null ||
               headerAction != null)

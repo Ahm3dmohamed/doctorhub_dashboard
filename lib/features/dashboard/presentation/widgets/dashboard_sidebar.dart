@@ -332,7 +332,7 @@ class _LanguageToggleButton extends StatelessWidget {
     return GestureDetector(
       onTap: onToggle,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.primary.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(AppConstants.radiusMd),
@@ -346,12 +346,18 @@ class _LanguageToggleButton extends StatelessWidget {
               size: 16,
               color: AppColors.primary,
             ),
-            const SizedBox(width: 6),
-            Text(
-              isArabic ? 'English' : 'العربية',
-              style: AppTypography.bodySm(
-                color: AppColors.primary,
-                weight: FontWeight.w600,
+            const SizedBox(width: 4),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  isArabic ? 'English' : 'العربية',
+                  style: AppTypography.bodySm(
+                    color: AppColors.primary,
+                    weight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                ),
               ),
             ),
           ],
@@ -412,7 +418,7 @@ class _ThemeToggleButton extends StatelessWidget {
       onTap: onToggle,
       child: AnimatedContainer(
         duration: AppConstants.animFast,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         decoration: BoxDecoration(
           color: isDark
               ? AppColors.primary.withValues(alpha: 0.1)
@@ -436,12 +442,18 @@ class _ThemeToggleButton extends StatelessWidget {
                 color: isDark ? AppColors.primary : AppColors.warning,
               ),
             ),
-            const SizedBox(width: 6),
-            Text(
-              isDark ? l10n.commonDarkMode : l10n.commonLightMode,
-              style: AppTypography.bodySm(
-                color: isDark ? AppColors.primary : AppColors.warning,
-                weight: FontWeight.w600,
+            const SizedBox(width: 4),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  isDark ? l10n.commonDarkMode : l10n.commonLightMode,
+                  style: AppTypography.bodySm(
+                    color: isDark ? AppColors.primary : AppColors.warning,
+                    weight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                ),
               ),
             ),
           ],

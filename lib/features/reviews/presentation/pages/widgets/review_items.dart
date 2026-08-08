@@ -2,6 +2,7 @@ import 'package:doctorhub_dashboard/app/theme/app_colors.dart';
 import 'package:doctorhub_dashboard/app/theme/app_typography.dart';
 import 'package:doctorhub_dashboard/core/constants/app_constants.dart';
 import 'package:doctorhub_dashboard/features/reviews/presentation/cubit/review_cubit.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:doctorhub_dashboard/shared/widgets/app_text_field.dart';
 import 'package:doctorhub_dashboard/shared/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -179,7 +180,7 @@ class _ReviewItemsState extends State<ReviewItems> {
             if (!_isReplying)
               TextButton.icon(
                 icon: const Icon(Icons.reply_rounded, size: 16),
-                label: const Text('Reply to review'),
+                label: Text(AppLocalizations.of(context)!.reviewsReply),
                 onPressed: () => setState(() => _isReplying = true),
               )
             else
@@ -188,8 +189,8 @@ class _ReviewItemsState extends State<ReviewItems> {
                 children: [
                   AppTextField(
                     controller: _replyController,
-                    label: 'Official Reply',
-                    hint: 'Type your official response...',
+                    label: AppLocalizations.of(context)!.reviewsReply,
+                    hint: AppLocalizations.of(context)!.reviewsTypeReply,
                     maxLines: 2,
                   ),
                   const SizedBox(height: 8),
@@ -199,11 +200,11 @@ class _ReviewItemsState extends State<ReviewItems> {
                       TextButton(
                         onPressed: () =>
                             setState(() => _isReplying = false),
-                        child: const Text('Cancel'),
+                        child: Text(AppLocalizations.of(context)!.commonCancel),
                       ),
                       const SizedBox(width: 8),
                       PrimaryButton.small(
-                        label: 'Post Reply',
+                        label: AppLocalizations.of(context)!.reviewsSendReply,
                         onPressed: () {
                           if (_replyController.text.isNotEmpty) {
                             context.read<ReviewCubit>().replyToReview(

@@ -410,6 +410,72 @@ abstract class AppLocalizations {
   /// **'Reset code must be 6 characters'**
   String get valInvalidToken;
 
+  /// No description provided for @authSuperAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Super Admin'**
+  String get authSuperAdmin;
+
+  /// No description provided for @authDoctor.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor'**
+  String get authDoctor;
+
+  /// No description provided for @authClinicManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Clinic Manager'**
+  String get authClinicManager;
+
+  /// No description provided for @authTheModernWayToManage.
+  ///
+  /// In en, this message translates to:
+  /// **'The Modern Way To Manage'**
+  String get authTheModernWayToManage;
+
+  /// No description provided for @authHealthcare.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare'**
+  String get authHealthcare;
+
+  /// No description provided for @authHealthcarePlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare Platform'**
+  String get authHealthcarePlatform;
+
+  /// No description provided for @authDoctorHubCentralizes.
+  ///
+  /// In en, this message translates to:
+  /// **'DoctorHub centralizes patient records, appointments,\nand analytics for doctors, clinics, and administrators.'**
+  String get authDoctorHubCentralizes;
+
+  /// No description provided for @authRealTimeAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time analytics & insights'**
+  String get authRealTimeAnalytics;
+
+  /// No description provided for @authPatientManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Patient management simplified'**
+  String get authPatientManagement;
+
+  /// No description provided for @authSmartAppointment.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart appointment scheduling'**
+  String get authSmartAppointment;
+
+  /// No description provided for @authHippaCompliant.
+  ///
+  /// In en, this message translates to:
+  /// **'HIPAA-compliant & secure'**
+  String get authHippaCompliant;
+
   /// No description provided for @authWelcomeBack.
   ///
   /// In en, this message translates to:
@@ -517,6 +583,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Role to Quick Fill:'**
   String get authSelectRole;
+
+  /// No description provided for @authSecureLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure login'**
+  String get authSecureLogin;
+
+  /// No description provided for @authEmailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get authEmailAddress;
+
+  /// No description provided for @authProtectedByDoctorhub.
+  ///
+  /// In en, this message translates to:
+  /// **'Protected by Doctorhub'**
+  String get authProtectedByDoctorhub;
+
+  /// No description provided for @authPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPassword;
+
+  /// No description provided for @authPasswordIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password'**
+  String get authPasswordIncorrect;
 
   /// No description provided for @dashWelcome.
   ///
@@ -1321,6 +1417,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No reviews found.'**
   String get reviewsNoFound;
+
+  /// No description provided for @actNewPatient.
+  ///
+  /// In en, this message translates to:
+  /// **'New patient registered'**
+  String get actNewPatient;
+
+  /// No description provided for @actAptCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment completed'**
+  String get actAptCompleted;
+
+  /// No description provided for @actAptRescheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment rescheduled'**
+  String get actAptRescheduled;
+
+  /// No description provided for @actLabUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab results uploaded'**
+  String get actLabUploaded;
+
+  /// No description provided for @actSystemAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'System alert'**
+  String get actSystemAlert;
+
+  /// No description provided for @actTimeMinAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min ago'**
+  String actTimeMinAgo(int count);
+
+  /// No description provided for @actTimeHrAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} hr ago'**
+  String actTimeHrAgo(int count);
+
+  /// No description provided for @actTimeHrsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} hrs ago'**
+  String actTimeHrsAgo(int count);
 }
 
 class _AppLocalizationsDelegate

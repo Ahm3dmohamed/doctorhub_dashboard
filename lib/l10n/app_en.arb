@@ -55,7 +55,18 @@
   "valPasswordLength": "Password must be at least 8 characters",
   "valPasswordMismatch": "Passwords do not match",
   "valInvalidToken": "Reset code must be 6 characters",
-
+   "authSuperAdmin":"Super Admin",
+   "authDoctor":"Doctor",
+   "authClinicManager":"Clinic Manager",
+   "authTheModernWayToManage":"The Modern Way To Manage",
+   "authHealthcare":"Healthcare",
+   "authHealthcarePlatform":"Healthcare Platform",
+   "authDoctorHubCentralizes":"DoctorHub centralizes patient records, appointments,\nand analytics for doctors, clinics, and administrators.",
+   "authRealTimeAnalytics":"Real-time analytics & insights",
+   "authPatientManagement":"Patient management simplified",
+   "authSmartAppointment":"Smart appointment scheduling",
+   "authHippaCompliant":"HIPAA-compliant & secure",
+   
   "authWelcomeBack": "Welcome back!",
   "authLoginSubtitle": "Enter your credentials to access the DoctorHub dashboard.",
   "authForgotPassword": "Forgot Password?",
@@ -74,7 +85,11 @@
   "authResetPasswordBtn": "Reset Password",
   "authResetSuccess": "Password reset successfully!",
   "authSelectRole": "Select Role to Quick Fill:",
-
+  "authSecureLogin": "Secure login",
+  "authEmailAddress": "Email Address",
+  "authProtectedByDoctorhub": "Protected by Doctorhub",
+  "authPassword": "Password",
+  "authPasswordIncorrect": "Incorrect password",
   "dashWelcome": "Welcome back, {name}!",
   "@dashWelcome": {
     "placeholders": {
@@ -252,5 +267,29 @@
   "reviewsReply": "Reply to Review",
   "reviewsTypeReply": "Type your response...",
   "reviewsSendReply": "Send Reply",
-  "reviewsNoFound": "No reviews found."
+  "reviewsNoFound": "No reviews found.",
+
+  "actNewPatient": "New patient registered",
+  "actAptCompleted": "Appointment completed",
+  "actAptRescheduled": "Appointment rescheduled",
+  "actLabUploaded": "Lab results uploaded",
+  "actSystemAlert": "System alert",
+  "actTimeMinAgo": "{count} min ago",
+  "@actTimeMinAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "actTimeHrAgo": "{count} hr ago",
+  "@actTimeHrAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "actTimeHrsAgo": "{count} hrs ago",
+  "@actTimeHrsAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
 }

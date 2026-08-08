@@ -165,6 +165,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get valInvalidToken => 'Reset code must be 6 characters';
 
   @override
+  String get authSuperAdmin => 'Super Admin';
+
+  @override
+  String get authDoctor => 'Doctor';
+
+  @override
+  String get authClinicManager => 'Clinic Manager';
+
+  @override
+  String get authTheModernWayToManage => 'The Modern Way To Manage';
+
+  @override
+  String get authHealthcare => 'Healthcare';
+
+  @override
+  String get authHealthcarePlatform => 'Healthcare Platform';
+
+  @override
+  String get authDoctorHubCentralizes =>
+      'DoctorHub centralizes patient records, appointments,\nand analytics for doctors, clinics, and administrators.';
+
+  @override
+  String get authRealTimeAnalytics => 'Real-time analytics & insights';
+
+  @override
+  String get authPatientManagement => 'Patient management simplified';
+
+  @override
+  String get authSmartAppointment => 'Smart appointment scheduling';
+
+  @override
+  String get authHippaCompliant => 'HIPAA-compliant & secure';
+
+  @override
   String get authWelcomeBack => 'Welcome back!';
 
   @override
@@ -220,6 +254,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authSelectRole => 'Select Role to Quick Fill:';
+
+  @override
+  String get authSecureLogin => 'Secure login';
+
+  @override
+  String get authEmailAddress => 'Email Address';
+
+  @override
+  String get authProtectedByDoctorhub => 'Protected by Doctorhub';
+
+  @override
+  String get authPassword => 'Password';
+
+  @override
+  String get authPasswordIncorrect => 'Incorrect password';
 
   @override
   String dashWelcome(String name) {
@@ -650,4 +699,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewsNoFound => 'No reviews found.';
+
+  @override
+  String get actNewPatient => 'New patient registered';
+
+  @override
+  String get actAptCompleted => 'Appointment completed';
+
+  @override
+  String get actAptRescheduled => 'Appointment rescheduled';
+
+  @override
+  String get actLabUploaded => 'Lab results uploaded';
+
+  @override
+  String get actSystemAlert => 'System alert';
+
+  @override
+  String actTimeMinAgo(int count) {
+    return '$count min ago';
+  }
+
+  @override
+  String actTimeHrAgo(int count) {
+    return '$count hr ago';
+  }
+
+  @override
+  String actTimeHrsAgo(int count) {
+    return '$count hrs ago';
+  }
 }

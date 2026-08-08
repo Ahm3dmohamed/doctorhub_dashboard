@@ -1,6 +1,6 @@
 {
   "@@locale": "ar",
-  "appName": "دكتور هب",
+  "appName": "دكتور ",
 
   "navDashboard": "لوحة التحكم",
   "navPatients": "المرضى",
@@ -55,7 +55,18 @@
   "valPasswordLength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
   "valPasswordMismatch": "كلمات المرور غير متطابقة",
   "valInvalidToken": "رمز إعادة التعيين يجب أن يتكون من 6 أحرف",
+   "authSuperAdmin":"مدير النظام",
+   "authDoctor":"طبيب",
+   "authClinicManager":"مدير العيادة",
 
+   "authTheModernWayToManage": "الطريقة الحديثة لإدارة الرعاية الصحية",
+   "authHealthcare": "الرعاية الصحية",
+   "authHealthcarePlatform":"منصة الرعاية الصحية",
+   "authDoctorHubCentralizes": "دكتور هب يجمع سجلات المرضى والمواعيد والتحليلات للأطباء والعيادات والمسؤولين.",
+   "authRealTimeAnalytics": "تحليلات في الوقت الحقيقي ورؤى",
+   "authPatientManagement": "إدارة المرضى مبسطة",
+   "authSmartAppointment": "جدولة مواعيد ذكية",
+   "authHippaCompliant": "متوافقة مع HIPAA وآمنة",
   "authWelcomeBack": "أهلاً بعودتك!",
   "authLoginSubtitle": "أدخل بيانات الاعتماد الخاصة بك للوصول إلى لوحة تحكم دكتور هب.",
   "authForgotPassword": "نسيت كلمة المرور؟",
@@ -74,7 +85,11 @@
   "authResetPasswordBtn": "إعادة تعيين كلمة المرور",
   "authResetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح!",
   "authSelectRole": "اختر دوراً للتعبئة السريعة:",
-
+  "authSecureLogin": "تسجيل دخول آمن",
+  "authEmailAddress": "عنوان البريد الإلكتروني",
+  "authProtectedByDoctorhub": "محمي بواسطة دكتور هب",
+  "authPassword": "كلمة المرور",
+  "authPasswordIncorrect": "كلمة المرور غير صحيحة",
   "dashWelcome": "أهلاً بعودتك، {name}!",
   "dashSubtitle": "إليك ما يحدث عبر دكتور هب اليوم.",
   "dashTotalPatients": "إجمالي المرضى",
@@ -217,5 +232,29 @@
   "reviewsReply": "الرد على التقييم",
   "reviewsTypeReply": "اكتب ردك...",
   "reviewsSendReply": "إرسال الرد",
-  "reviewsNoFound": "لم يتم العثور على تقييمات."
+  "reviewsNoFound": "لم يتم العثور على تقييمات.",
+
+  "actNewPatient": "تسجيل مريض جديد",
+  "actAptCompleted": "إكتمل الكشف الطبي",
+  "actAptRescheduled": "تم إعاده جدولة الموعد",
+  "actLabUploaded": "رفع نتائج التحاليل",
+  "actSystemAlert": "تنبيه بالنظام",
+  "actTimeMinAgo": "منذ {count} دقيقة",
+  "@actTimeMinAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "actTimeHrAgo": "منذ ساعة",
+  "@actTimeHrAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "actTimeHrsAgo": "منذ {count} ساعات",
+  "@actTimeHrsAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
 }

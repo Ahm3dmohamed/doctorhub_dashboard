@@ -110,7 +110,7 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
 
               AppTextField(
                 controller: _passwordController,
-                label: 'Password',
+                label: l10n.authPassword,
                 hint: '••••••••',
                 obscureText: true,
                 textInputAction: TextInputAction.done,
@@ -167,7 +167,7 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
 
               const SizedBox(height: AppConstants.space6),
 
-              buildFooter(),
+              buildFooter(context),
             ],
           ),
         );
@@ -178,14 +178,19 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
   Widget buildQuickFillChips(AppLocalizations l10n) {
     final quickFills = [
       (
-        'Super Admin',
+        l10n.authSuperAdmin,
         'admin@doctorhub.com',
         'Admin123',
         AppColors.superAdminColor,
       ),
-      ('Doctor', 'doctor@doctorhub.com', 'Doctor123', AppColors.doctorColor),
       (
-        'Clinic Manager',
+        l10n.authDoctor,
+        'doctor@doctorhub.com',
+        'Doctor123',
+        AppColors.doctorColor,
+      ),
+      (
+        l10n.authClinicManager,
         'manager@doctorhub.com',
         'Manager123',
         AppColors.clinicManagerColor,
