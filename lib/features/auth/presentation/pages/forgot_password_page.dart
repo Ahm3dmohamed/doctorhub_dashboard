@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -71,13 +72,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
         backgroundColor: AppColors.neutral950,
         body: Stack(
           children: [
-            // Background
             Container(
               decoration: const BoxDecoration(
                 gradient: AppColors.authBackgroundGradient,
               ),
             ),
-
             SafeArea(
               child: Center(
                 child: SingleChildScrollView(
@@ -99,6 +98,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
   }
 
   Widget _buildCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
     return Container(
       padding: const EdgeInsets.all(AppConstants.space8),
       decoration: BoxDecoration(
@@ -122,20 +124,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Back button
                 GestureDetector(
                   onTap: () => context.go(AppRoutes.login),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
-                        Icons.arrow_back_rounded,
+                      Icon(
+                        isRtl
+                            ? Icons.arrow_forward_rounded
+                            : Icons.arrow_back_rounded,
                         size: 16,
                         color: AppColors.darkTextSecondary,
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'Back to login',
+                        l10n.authBackToLogin,
                         style: AppTypography.bodySm(
                           color: AppColors.darkTextSecondary,
                         ),
@@ -146,7 +149,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
 
                 const SizedBox(height: AppConstants.space8),
 
-                // Icon
                 Container(
                   width: 52,
                   height: 52,
@@ -164,14 +166,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                 const SizedBox(height: AppConstants.space5),
 
                 Text(
-                  'Forgot password?',
+                  l10n.authForgotPasswordTitle,
                   style: AppTypography.headingXl(color: Colors.white),
                 ),
 
                 const SizedBox(height: AppConstants.space2),
 
                 Text(
-                  'No worries! Enter your email address and we\'ll send you a reset link.',
+                  l10n.authForgotPasswordSubtitle,
                   style: AppTypography.bodyMd(
                     color: AppColors.darkTextSecondary,
                   ),
@@ -189,12 +191,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
 
                 AppTextField(
                   controller: _emailController,
-                  label: 'Email Address',
+                  label: l10n.commonEmail,
                   hint: 'you@example.com',
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
                   prefixIcon: Icons.mail_outline_rounded,
-                  validator: Validators.email,
+                  validator: (val) => Validators.email(val, l10n),
                   onFieldSubmitted: (_) => _onSubmit(),
                   enabled: !isLoading,
                 ),
@@ -202,7 +204,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                 const SizedBox(height: AppConstants.space6),
 
                 PrimaryButton.large(
-                  label: 'Send Reset Link',
+                  label: l10n.authSendResetLink,
                   onPressed: isLoading ? null : _onSubmit,
                   isLoading: isLoading,
                   trailingIcon: isLoading ? null : Icons.send_rounded,
@@ -211,19 +213,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                 const SizedBox(height: AppConstants.space6),
 
                 Center(
-                  child: Text(
-                    'Remember your password? ',
-                    style: AppTypography.bodySm(
-                      color: AppColors.darkTextSecondary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Center(
                   child: TextButton(
                     onPressed: () => context.go(AppRoutes.login),
                     child: Text(
-                      'Sign In',
+                      l10n.authSignIn,
                       style: AppTypography.bodySm(
                         color: AppColors.primaryLight,
                         weight: FontWeight.w600,

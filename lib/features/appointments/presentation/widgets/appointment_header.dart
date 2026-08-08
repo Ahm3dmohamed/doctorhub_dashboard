@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -19,6 +20,7 @@ class AppointmentHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,7 +31,7 @@ class AppointmentHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Appointments & Scheduling',
+                l10n.apptsTitle,
                 style: AppTypography.headingXl(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -38,7 +40,7 @@ class AppointmentHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Manage upcoming patient consultations, reschedule or approve bookings',
+                l10n.apptsSubtitle,
                 style: AppTypography.bodyMd(
                   color: isDark
                       ? AppColors.darkTextSecondary
@@ -52,7 +54,7 @@ class AppointmentHeader extends StatelessWidget {
         Row(
           children: [
             SecondaryButton(
-              label: isCalendarView ? 'Table View' : 'Calendar View',
+              label: isCalendarView ? l10n.apptsTableTab : l10n.apptsCalendarTab,
               leadingIcon: isCalendarView
                   ? Icons.table_chart_rounded
                   : Icons.calendar_month_rounded,
@@ -60,7 +62,7 @@ class AppointmentHeader extends StatelessWidget {
             ),
             const SizedBox(width: AppConstants.space3),
             PrimaryButton(
-              label: 'Book Appointment',
+              label: l10n.apptsBook,
               leadingIcon: Icons.add_rounded,
               onPressed: onBookAppointment,
             ),

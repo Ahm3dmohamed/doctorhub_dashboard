@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/widgets/app_modal_dialog.dart';
 import '../../../../shared/widgets/app_text_field.dart';
@@ -68,40 +69,42 @@ class _BookAppointmentDialogState extends State<BookAppointmentDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AppModalDialog(
-      title: 'Book Appointment',
-      subtitle: 'Schedule a new consultation for a patient.',
+      title: l10n.apptsBook,
+      subtitle: l10n.apptsSubtitle,
       onConfirm: _submit,
       content: Column(
         children: [
           AppTextField(
             controller: _patientCtrl,
-            label: 'Patient Name',
+            label: l10n.apptsPatient,
             hint: 'John Smith',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _doctorCtrl,
-            label: 'Doctor Name',
+            label: l10n.apptsDoctor,
             hint: 'Dr. Sarah Jenkins',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _specialtyCtrl,
-            label: 'Specialty',
+            label: l10n.doctorsSpecialty,
             hint: 'Cardiology',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _clinicCtrl,
-            label: 'Clinic Name',
+            label: l10n.clinicsName,
             hint: 'Central Heart Institute',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _reasonCtrl,
-            label: 'Reason for Visit',
-            hint: 'Checkup...',
+            label: l10n.apptsReason,
+            hint: '...',
           ),
         ],
       ),

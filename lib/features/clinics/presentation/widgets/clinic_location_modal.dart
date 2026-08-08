@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -16,11 +17,12 @@ class ClinicLocationModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppModalDialog(
-      title: 'Location — ${clinic.name}',
+      title: '${l10n.clinicsViewLocation} — ${clinic.name}',
       subtitle: '${clinic.location.address}, ${clinic.location.city}',
-      confirmLabel: 'Close',
+      confirmLabel: l10n.commonClose,
       onConfirm: () => Navigator.of(context).pop(),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

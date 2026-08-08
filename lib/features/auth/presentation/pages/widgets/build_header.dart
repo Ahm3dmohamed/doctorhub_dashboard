@@ -1,13 +1,15 @@
-import 'package:doctorhub_dashboard/app/theme/app_colors.dart';
-import 'package:doctorhub_dashboard/app/theme/app_typography.dart';
-import 'package:doctorhub_dashboard/core/constants/app_constants.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import '../../../../../app/theme/app_colors.dart';
+import '../../../../../app/theme/app_typography.dart';
+import '../../../../../core/constants/app_constants.dart';
 
-Widget buildHeader() {
+Widget buildHeader(BuildContext context) {
+  final l10n = AppLocalizations.of(context)!;
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      // Logo
       Row(
         children: [
           Container(
@@ -24,18 +26,17 @@ Widget buildHeader() {
             ),
           ),
           const SizedBox(width: AppConstants.space3),
-          Text('DoctorHub', style: AppTypography.brand(color: Colors.white)),
+          Text(l10n.appName, style: AppTypography.brand(color: Colors.white)),
         ],
       ),
-
       const SizedBox(height: AppConstants.space4),
-
-      Text('Welcome back', style: AppTypography.displaySm(color: Colors.white)),
-
-      const SizedBox(height: AppConstants.space2),
-
       Text(
-        'Sign in to your healthcare dashboard',
+        l10n.authWelcomeBack,
+        style: AppTypography.displaySm(color: Colors.white),
+      ),
+      const SizedBox(height: AppConstants.space2),
+      Text(
+        l10n.authLoginSubtitle,
         style: AppTypography.bodyLg(color: AppColors.darkTextSecondary),
       ),
     ],

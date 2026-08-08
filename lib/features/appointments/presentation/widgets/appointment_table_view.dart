@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
@@ -27,15 +28,16 @@ class AppointmentTableView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppDataTable<AppointmentEntity>(
       isLoading: isLoading,
       items: appointments,
-      searchHint: 'Search appointments by patient, doctor...',
+      searchHint: l10n.apptsSearchHint,
       onSearchChanged: onSearchChanged,
       columns: [
         DataTableColumn<AppointmentEntity>(
-          title: 'Patient',
+          title: l10n.apptsPatient,
           builder: (a) => Text(
             a.patientName,
             style: AppTypography.bodyMd(
@@ -47,7 +49,7 @@ class AppointmentTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<AppointmentEntity>(
-          title: 'Doctor & Specialty',
+          title: l10n.apptsDoctor,
           builder: (a) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +74,7 @@ class AppointmentTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<AppointmentEntity>(
-          title: 'Date & Time',
+          title: l10n.apptsDateTime,
           builder: (a) => Text(
             DateFormat('MMM dd, yyyy • hh:mm a').format(a.dateTime),
             style: AppTypography.bodySm(
@@ -83,11 +85,11 @@ class AppointmentTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<AppointmentEntity>(
-          title: 'Status',
+          title: l10n.commonStatus,
           builder: (a) => AppointmentStatusBadge(status: a.status),
         ),
         DataTableColumn<AppointmentEntity>(
-          title: 'Actions',
+          title: l10n.commonActions,
           builder: (a) => Row(
             children: [
               if (a.status == AppointmentStatus.pending) ...[
@@ -98,7 +100,7 @@ class AppointmentTableView extends StatelessWidget {
                     size: 20,
                   ),
                   onPressed: () => onAccept(a),
-                  tooltip: 'Accept Appointment',
+                  tooltip: l10n.apptsUpcoming,
                 ),
                 IconButton(
                   icon: const Icon(
@@ -107,7 +109,7 @@ class AppointmentTableView extends StatelessWidget {
                     size: 20,
                   ),
                   onPressed: () => onReject(a),
-                  tooltip: 'Reject Appointment',
+                  tooltip: l10n.apptsCancelled,
                 ),
               ],
               IconButton(
@@ -116,7 +118,7 @@ class AppointmentTableView extends StatelessWidget {
                   size: 18,
                 ),
                 onPressed: () => onReschedule(a),
-                tooltip: 'Reschedule',
+                tooltip: l10n.apptsReschedule,
               ),
             ],
           ),

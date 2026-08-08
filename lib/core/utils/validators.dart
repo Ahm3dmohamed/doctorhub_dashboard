@@ -1,114 +1,103 @@
-/// DoctorHub — Form Validators
-/// Returns null on valid, error string on invalid
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
+
+/// DoctorHub — Form Validators with AppLocalizations support
 class Validators {
   Validators._();
 
   // ─── Email ────────────────────────────────────────────────────────────────
-  static String? email(String? value) {
+  static String? email(String? value, [AppLocalizations? l10n]) {
     if (value == null || value.trim().isEmpty) {
-      return 'Email address is required';
+      return l10n?.valRequired ?? 'Email address is required';
     }
     final trimmed = value.trim();
     final emailRegex = RegExp(
       r'^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$',
     );
     if (!emailRegex.hasMatch(trimmed)) {
-      return 'Enter a valid email address';
+      return l10n?.valInvalidEmail ?? 'Enter a valid email address';
     }
     return null;
   }
 
   // ─── Password ─────────────────────────────────────────────────────────────
-  static String? password(String? value) {
+  static String? password(String? value, [AppLocalizations? l10n]) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return l10n?.valRequired ?? 'Password is required';
     }
     if (value.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Password must contain at least one number';
-    }
-    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      return 'Password must contain at least one special character';
+      return l10n?.valPasswordLength ??
+          'Password must be at least 8 characters';
     }
     return null;
   }
 
-  /// Simpler password validator for login (don't enforce rules on existing passwords)
-  static String? loginPassword(String? value) {
+  /// Simpler password validator for login
+  static String? loginPassword(String? value, [AppLocalizations? l10n]) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return l10n?.valRequired ?? 'Password is required';
     }
     if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+      return l10n?.valPasswordLength ??
+          'Password must be at least 6 characters';
     }
     return null;
   }
 
   // ─── Confirm Password ─────────────────────────────────────────────────────
-  static String? Function(String?) confirmPassword(String originalPassword) {
+  static String? Function(String?) confirmPassword(
+    String originalPassword, [
+    AppLocalizations? l10n,
+  ]) {
     return (String? value) {
       if (value == null || value.isEmpty) {
-        return 'Please confirm your password';
+        return l10n?.valRequired ?? 'Please confirm your password';
       }
       if (value != originalPassword) {
-        return 'Passwords do not match';
+        return l10n?.valPasswordMismatch ?? 'Passwords do not match';
       }
       return null;
     };
   }
 
   // ─── Required ─────────────────────────────────────────────────────────────
-  static String? required(String? value, {String? fieldName}) {
+  static String? required(
+    String? value, {
+    String? fieldName,
+    AppLocalizations? l10n,
+  }) {
     if (value == null || value.trim().isEmpty) {
-      return '${fieldName ?? 'This field'} is required';
-    }
-    return null;
-  }
-
-  // ─── Name ─────────────────────────────────────────────────────────────────
-  static String? name(String? value, {String fieldName = 'Name'}) {
-    if (value == null || value.trim().isEmpty) {
-      return '$fieldName is required';
-    }
-    if (value.trim().length < 2) {
-      return '$fieldName must be at least 2 characters';
-    }
-    if (!RegExp(r"^[a-zA-Z\s\-'\.]+$").hasMatch(value.trim())) {
-      return '$fieldName contains invalid characters';
+      if (fieldName != null) {
+        return '$fieldName ${l10n?.valRequired ?? 'is required'}';
+      }
+      return l10n?.valRequired ?? 'This field is required';
     }
     return null;
   }
 
   // ─── Phone ────────────────────────────────────────────────────────────────
-  static String? phone(String? value) {
+  static String? phone(String? value, [AppLocalizations? l10n]) {
     if (value == null || value.trim().isEmpty) {
-      return 'Phone number is required';
+      return l10n?.valRequired ?? 'Phone number is required';
     }
     final cleaned = value.replaceAll(RegExp(r'[\s\-\(\)\+]'), '');
     if (!RegExp(r'^\d{7,15}$').hasMatch(cleaned)) {
-      return 'Enter a valid phone number';
+      return l10n?.valInvalidPhone ?? 'Enter a valid phone number';
     }
     return null;
   }
 
-  // ─── Reset Token (OTP-style) ──────────────────────────────────────────────
-  static String? resetToken(String? value) {
+  // ─── Reset Token ──────────────────────────────────────────────────────────
+  static String? resetToken(String? value, [AppLocalizations? l10n]) {
     if (value == null || value.trim().isEmpty) {
-      return 'Reset code is required';
+      return l10n?.valRequired ?? 'Reset code is required';
     }
     if (value.trim().length < 6) {
-      return 'Enter the 6-character reset code';
+      return l10n?.valInvalidToken ?? 'Enter the 6-character reset code';
     }
     return null;
   }
 
   // ─── Compose validators ───────────────────────────────────────────────────
-  /// Run multiple validators and return the first error
   static String? Function(String?) compose(
     List<String? Function(String?)> validators,
   ) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -22,13 +23,14 @@ class MedicalRecordSearchFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Row(
       children: [
         Expanded(
           child: AppTextField(
             controller: searchController,
-            hint: 'Search by patient, doctor, diagnosis or ID...',
+            hint: l10n.medSearchHint,
             prefixIcon: Icons.search_rounded,
             onChanged: onSearchChanged,
             label: '',
@@ -40,21 +42,17 @@ class MedicalRecordSearchFilter extends StatelessWidget {
             horizontal: AppConstants.space3,
           ),
           decoration: BoxDecoration(
-            color: isDark
-                ? AppColors.darkSurface
-                : AppColors.lightSurface,
+            color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
             borderRadius: BorderRadius.circular(AppConstants.radiusLg),
             border: Border.all(
-              color: isDark
-                  ? AppColors.darkBorder
-                  : AppColors.lightBorder,
+              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
             ),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<RecordType?>(
               value: selectedType,
               hint: Text(
-                'All Record Types',
+                l10n.commonFilter,
                 style: AppTypography.bodySm(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -68,7 +66,7 @@ class MedicalRecordSearchFilter extends StatelessWidget {
                 DropdownMenuItem<RecordType?>(
                   value: null,
                   child: Text(
-                    'All Record Types',
+                    l10n.commonFilter,
                     style: AppTypography.bodySm(
                       color: isDark
                           ? AppColors.darkTextPrimary

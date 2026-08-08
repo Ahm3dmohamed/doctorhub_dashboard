@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -60,6 +61,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark
@@ -73,10 +75,10 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
             AppBreadcrumb(
               items: [
                 BreadcrumbItem(
-                  label: 'Dashboard',
+                  label: l10n.navDashboard,
                   onTap: () => context.go(AppRoutes.dashboard),
                 ),
-                const BreadcrumbItem(label: 'Appointments'),
+                BreadcrumbItem(label: l10n.navAppointments),
               ],
             ),
             const SizedBox(height: AppConstants.space4),
@@ -126,12 +128,10 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                           status: _selectedStatus,
                         );
                   },
-                  onAccept: (a) => context
-                      .read<AppointmentCubit>()
-                      .acceptAppointment(a.id),
-                  onReject: (a) => context
-                      .read<AppointmentCubit>()
-                      .rejectAppointment(a.id),
+                  onAccept: (a) =>
+                      context.read<AppointmentCubit>().acceptAppointment(a.id),
+                  onReject: (a) =>
+                      context.read<AppointmentCubit>().rejectAppointment(a.id),
                   onReschedule: _showRescheduleModal,
                 );
               },

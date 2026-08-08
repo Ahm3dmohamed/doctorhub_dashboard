@@ -1,5 +1,6 @@
 import 'package:doctorhub_dashboard/features/reviews/domain/entities/review_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../../app/theme/app_colors.dart';
 import '../../../../../core/constants/app_constants.dart';
 import '../../../../../shared/widgets/app_text_field.dart';
@@ -25,6 +26,8 @@ class ReviewFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,17 +37,17 @@ class ReviewFilterBar extends StatelessWidget {
           labelColor: AppColors.primary,
           unselectedLabelColor: AppColors.neutral400,
           indicatorColor: AppColors.primary,
-          tabs: const [
-            Tab(text: 'All Reviews'),
-            Tab(text: 'Doctor Reviews'),
-            Tab(text: 'Clinic Reviews'),
+          tabs: [
+            Tab(text: l10n.reviewsAll),
+            Tab(text: l10n.reviewsDoctorTab),
+            Tab(text: l10n.reviewsClinicTab),
           ],
         ),
         const SizedBox(height: AppConstants.space4),
         AppTextField(
           controller: searchController,
-          label: 'Search Reviews',
-          hint: 'Search reviews by doctor name, clinic, author or keyword...',
+          label: l10n.commonSearch,
+          hint: l10n.reviewsSearchHint,
           prefixIcon: Icons.search_rounded,
           onChanged: (val) =>
               onChanged(val, _typeForIndex(tabController.index)),

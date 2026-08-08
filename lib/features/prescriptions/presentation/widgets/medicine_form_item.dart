@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -37,6 +38,7 @@ class MedicineFormItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -50,7 +52,7 @@ class MedicineFormItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Medicine #${index + 1}',
+                '${l10n.rxMedicineName} #${index + 1}',
                 style: AppTypography.labelMd(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -71,7 +73,7 @@ class MedicineFormItem extends StatelessWidget {
           ),
           AppTextField(
             controller: data.name,
-            label: 'Medicine Name',
+            label: l10n.rxMedicineName,
             hint: 'e.g. Amoxicillin',
           ),
           const SizedBox(height: 8),
@@ -80,7 +82,7 @@ class MedicineFormItem extends StatelessWidget {
               Expanded(
                 child: AppTextField(
                   controller: data.dosage,
-                  label: 'Dosage',
+                  label: l10n.rxDosage,
                   hint: '500mg',
                 ),
               ),
@@ -88,7 +90,7 @@ class MedicineFormItem extends StatelessWidget {
               Expanded(
                 child: AppTextField(
                   controller: data.frequency,
-                  label: 'Frequency',
+                  label: l10n.rxFrequency,
                   hint: '3x Daily',
                 ),
               ),
@@ -100,7 +102,7 @@ class MedicineFormItem extends StatelessWidget {
               Expanded(
                 child: AppTextField(
                   controller: data.duration,
-                  label: 'Duration',
+                  label: l10n.rxDuration,
                   hint: '7 Days',
                 ),
               ),
@@ -108,7 +110,7 @@ class MedicineFormItem extends StatelessWidget {
               Expanded(
                 child: AppTextField(
                   controller: data.instructions,
-                  label: 'Instructions',
+                  label: l10n.rxInstructions,
                   hint: 'After meals',
                 ),
               ),

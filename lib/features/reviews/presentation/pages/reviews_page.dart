@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -55,6 +56,7 @@ class _ReviewsPageState extends State<ReviewsPage>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark
@@ -68,10 +70,10 @@ class _ReviewsPageState extends State<ReviewsPage>
             AppBreadcrumb(
               items: [
                 BreadcrumbItem(
-                  label: 'Dashboard',
+                  label: l10n.navDashboard,
                   onTap: () => context.go(AppRoutes.dashboard),
                 ),
-                const BreadcrumbItem(label: 'Reviews & Feedback'),
+                BreadcrumbItem(label: l10n.navReviews),
               ],
             ),
             const SizedBox(height: AppConstants.space4),
@@ -88,7 +90,7 @@ class _ReviewsPageState extends State<ReviewsPage>
             BlocBuilder<ReviewCubit, ReviewState>(
               builder: (context, state) {
                 if (state is ReviewLoading) {
-                  return const LoadingWidget(message: 'Loading Reviews...');
+                  return LoadingWidget(message: l10n.commonLoading);
                 }
                 if (state is ReviewError) {
                   return AppErrorWidget(
@@ -102,7 +104,7 @@ class _ReviewsPageState extends State<ReviewsPage>
                       child: Padding(
                         padding: const EdgeInsets.all(AppConstants.space10),
                         child: Text(
-                          'No reviews found.',
+                          l10n.reviewsNoFound,
                           style: AppTypography.headingMd(
                             color: isDark
                                 ? AppColors.darkTextPrimary

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_router.dart';
@@ -431,16 +432,11 @@ class DashboardWelcomeHeader extends StatelessWidget {
 
   const DashboardWelcomeHeader({super.key, required this.user});
 
-  String get _greeting {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
-  }
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
+    final firstName = user.name.split(' ').first;
 
     return Row(
       children: [
@@ -448,28 +444,17 @@ class DashboardWelcomeHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '$_greeting, ',
-                      style: AppTypography.headingXl(
-                        color: isDark
-                            ? AppColors.darkTextPrimary
-                            : AppColors.lightTextPrimary,
-                      ),
-                    ),
-                    TextSpan(
-                      text: user.name.split(' ').first,
-                      style: AppTypography.headingXl(color: AppColors.primary),
-                    ),
-                    TextSpan(text: ' 👋', style: AppTypography.headingXl()),
-                  ],
+              Text(
+                '${l10n.dashWelcome(firstName)} 👋',
+                style: AppTypography.headingXl(
+                  color: isDark
+                      ? AppColors.darkTextPrimary
+                      : AppColors.lightTextPrimary,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
-                "Here's what's happening at your clinic today",
+                l10n.dashSubtitle,
                 style: AppTypography.bodyMd(
                   color: isDark
                       ? AppColors.darkTextSecondary

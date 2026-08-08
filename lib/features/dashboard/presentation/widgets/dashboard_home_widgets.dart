@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_router.dart';
@@ -13,9 +14,9 @@ class DashboardStatsGrid extends StatelessWidget {
 
   const DashboardStatsGrid({super.key, required this.role});
 
-  List<_StatCardData> _buildStats(UserRole role) => [
-    const _StatCardData(
-      label: 'Total Patients',
+  List<_StatCardData> _buildStats(UserRole role, AppLocalizations l10n) => [
+    _StatCardData(
+      label: l10n.dashTotalPatients,
       value: '1,248',
       change: '+12%',
       isPositive: true,
@@ -23,29 +24,29 @@ class DashboardStatsGrid extends StatelessWidget {
       gradient: AppColors.primaryGradient,
       route: AppRoutes.patients,
     ),
-    const _StatCardData(
-      label: "Today's Appointments",
+    _StatCardData(
+      label: l10n.dashTodayAppointments,
       value: '24',
-      change: '+3 from yesterday',
+      change: '+3',
       isPositive: true,
       icon: Icons.calendar_today_rounded,
       gradient: AppColors.successGradient,
       route: AppRoutes.appointments,
     ),
-    const _StatCardData(
-      label: 'Pending Reviews',
+    _StatCardData(
+      label: l10n.dashPendingReviews,
       value: '7',
-      change: '-2 from last week',
+      change: '-2',
       isPositive: true,
       icon: Icons.rate_review_rounded,
       gradient: AppColors.warningGradient,
       route: AppRoutes.reviews,
     ),
     if (role == UserRole.superAdmin || role == UserRole.clinicManager)
-      const _StatCardData(
-        label: 'Active Doctors',
+      _StatCardData(
+        label: l10n.dashActiveDoctors,
         value: '18',
-        change: '+1 this month',
+        change: '+1',
         isPositive: true,
         icon: Icons.medical_services_rounded,
         gradient: AppColors.infoGradient,
@@ -55,7 +56,8 @@ class DashboardStatsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stats = _buildStats(role);
+    final l10n = AppLocalizations.of(context)!;
+    final stats = _buildStats(role, l10n);
     final columns = _gridColumns(context).clamp(1, 4);
 
     return GridView.builder(
@@ -101,7 +103,6 @@ class _StatCardData {
   });
 }
 
-/// Animated stat card with hover lift effect.
 class _StatCardWidget extends StatefulWidget {
   final _StatCardData stat;
 
@@ -125,23 +126,22 @@ class _StatCardWidgetState extends State<_StatCardWidget> {
         onTap: () => context.go(widget.stat.route),
         child: AnimatedContainer(
           duration: AppConstants.animFast,
-          transform: _isHovered
-              ? Matrix4.translationValues(0.0, -2.0, 0.0)
-              : Matrix4.identity(),
           padding: const EdgeInsets.all(AppConstants.space5),
           decoration: BoxDecoration(
             color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
             borderRadius: BorderRadius.circular(AppConstants.radiusXl),
             border: Border.all(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+              color: _isHovered
+                  ? AppColors.primary
+                  : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+              width: _isHovered ? 1.5 : 1.0,
             ),
             boxShadow: _isHovered
                 ? [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.1),
+                      color: AppColors.primary.withValues(alpha: 0.12),
                       blurRadius: 20,
-                      spreadRadius: -4,
-                      offset: const Offset(0, 8),
+                      spreadRadius: -2,
                     ),
                   ]
                 : [],
@@ -154,18 +154,24 @@ class _StatCardWidgetState extends State<_StatCardWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 30,
-                    height: 30,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
                       gradient: widget.stat.gradient,
-                      borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.radiusLg,
+                      ),
                     ),
-                    child: Icon(widget.stat.icon, color: Colors.white, size: 20),
+                    child: Icon(
+                      widget.stat.icon,
+                      color: Colors.white,
+                      size: 22,
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
-                      vertical: 3,
+                      vertical: 4,
                     ),
                     decoration: BoxDecoration(
                       color: widget.stat.isPositive
@@ -191,12 +197,13 @@ class _StatCardWidgetState extends State<_StatCardWidget> {
                 children: [
                   Text(
                     widget.stat.value,
-                    style: AppTypography.displaySm(
+                    style: AppTypography.headingXl(
                       color: isDark
                           ? AppColors.darkTextPrimary
                           : AppColors.lightTextPrimary,
                     ),
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     widget.stat.label,
                     style: AppTypography.bodySm(
@@ -219,54 +226,55 @@ class _StatCardWidgetState extends State<_StatCardWidget> {
 
 /// Card listing recent clinic activity items.
 class DashboardRecentActivityCard extends StatelessWidget {
-  static const _activities = [
-    _ActivityData(
-      icon: Icons.person_add_rounded,
-      title: 'New patient registered',
-      subtitle: 'Emma Thompson',
-      time: '2 min ago',
-      color: AppColors.primary,
-      route: AppRoutes.patients,
-    ),
-    _ActivityData(
-      icon: Icons.check_circle_rounded,
-      title: 'Appointment completed',
-      subtitle: 'Dr. Johnson — Room 4',
-      time: '18 min ago',
-      color: AppColors.success,
-      route: AppRoutes.appointments,
-    ),
-    _ActivityData(
-      icon: Icons.schedule_rounded,
-      title: 'Appointment rescheduled',
-      subtitle: 'Michael Chen → 3:00 PM',
-      time: '1 hr ago',
-      color: AppColors.warning,
-      route: AppRoutes.appointments,
-    ),
-    _ActivityData(
-      icon: Icons.medical_services_rounded,
-      title: 'Lab results uploaded',
-      subtitle: 'Sarah Williams',
-      time: '2 hrs ago',
-      color: AppColors.info,
-      route: AppRoutes.medicalRecords,
-    ),
-    _ActivityData(
-      icon: Icons.notifications_rounded,
-      title: 'System alert',
-      subtitle: 'Scheduled maintenance tonight',
-      time: '3 hrs ago',
-      color: AppColors.accent,
-      route: AppRoutes.notifications,
-    ),
-  ];
-
   const DashboardRecentActivityCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
+
+    final activities = [
+      _ActivityData(
+        icon: Icons.person_add_rounded,
+        title: 'New patient registered',
+        subtitle: 'Emma Thompson',
+        time: '2 min ago',
+        color: AppColors.primary,
+        route: AppRoutes.patients,
+      ),
+      _ActivityData(
+        icon: Icons.check_circle_rounded,
+        title: 'Appointment completed',
+        subtitle: 'Dr. Johnson — Room 4',
+        time: '18 min ago',
+        color: AppColors.success,
+        route: AppRoutes.appointments,
+      ),
+      _ActivityData(
+        icon: Icons.schedule_rounded,
+        title: 'Appointment rescheduled',
+        subtitle: 'Michael Chen → 3:00 PM',
+        time: '1 hr ago',
+        color: AppColors.warning,
+        route: AppRoutes.appointments,
+      ),
+      _ActivityData(
+        icon: Icons.medical_services_rounded,
+        title: 'Lab results uploaded',
+        subtitle: 'Sarah Williams',
+        time: '2 hrs ago',
+        color: AppColors.info,
+        route: AppRoutes.medicalRecords,
+      ),
+      _ActivityData(
+        icon: Icons.notifications_rounded,
+        title: 'System alert',
+        subtitle: 'Scheduled maintenance tonight',
+        time: '3 hrs ago',
+        color: AppColors.accent,
+        route: AppRoutes.notifications,
+      ),
+    ];
 
     return Container(
       padding: const EdgeInsets.all(AppConstants.space5),
@@ -284,7 +292,7 @@ class DashboardRecentActivityCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Recent Activity',
+                l10n.dashRecentActivity,
                 style: AppTypography.headingSm(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -294,7 +302,7 @@ class DashboardRecentActivityCard extends StatelessWidget {
               TextButton(
                 onPressed: () => context.go(AppRoutes.notifications),
                 child: Text(
-                  'View all',
+                  l10n.commonViewAll,
                   style: AppTypography.bodySm(
                     color: AppColors.primary,
                     weight: FontWeight.w500,
@@ -304,10 +312,10 @@ class DashboardRecentActivityCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppConstants.space3),
-          ..._activities.asMap().entries.map(
+          ...activities.asMap().entries.map(
             (e) => _ActivityItem(
               data: e.value,
-              isLast: e.key == _activities.length - 1,
+              isLast: e.key == activities.length - 1,
             ),
           ),
         ],
@@ -350,7 +358,10 @@ class _ActivityItem extends StatelessWidget {
           onTap: () => context.go(data.route),
           borderRadius: BorderRadius.circular(AppConstants.radiusMd),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppConstants.space3, horizontal: 4),
+            padding: const EdgeInsets.symmetric(
+              vertical: AppConstants.space3,
+              horizontal: 4,
+            ),
             child: Row(
               children: [
                 Container(
@@ -417,45 +428,47 @@ class DashboardQuickActionsCard extends StatelessWidget {
 
   const DashboardQuickActionsCard({super.key, required this.role});
 
-  List<_QuickActionData> _buildActions(UserRole role) => [
-    const _QuickActionData(
-      icon: Icons.person_add_rounded,
-      label: 'Add New Patient',
-      color: AppColors.primary,
-      route: AppRoutes.patients,
-    ),
-    const _QuickActionData(
-      icon: Icons.event_available_rounded,
-      label: 'Schedule Appointment',
-      color: AppColors.success,
-      route: AppRoutes.appointments,
-    ),
-    if (role == UserRole.doctor || role == UserRole.superAdmin)
-      const _QuickActionData(
-        icon: Icons.note_add_rounded,
-        label: 'Create Medical Record',
-        color: AppColors.info,
-        route: AppRoutes.medicalRecords,
-      ),
-    if (role == UserRole.superAdmin || role == UserRole.clinicManager)
-      const _QuickActionData(
-        icon: Icons.person_search_rounded,
-        label: 'Manage Doctors',
-        color: AppColors.warning,
-        route: AppRoutes.doctors,
-      ),
-    const _QuickActionData(
-      icon: Icons.download_rounded,
-      label: 'Export Reports',
-      color: AppColors.accent,
-      route: AppRoutes.reports,
-    ),
-  ];
+  List<_QuickActionData> _buildActions(UserRole role, AppLocalizations l10n) =>
+      [
+        _QuickActionData(
+          icon: Icons.person_add_rounded,
+          label: l10n.dashAddPatient,
+          color: AppColors.primary,
+          route: AppRoutes.patients,
+        ),
+        _QuickActionData(
+          icon: Icons.event_available_rounded,
+          label: l10n.dashBookAppointment,
+          color: AppColors.success,
+          route: AppRoutes.appointments,
+        ),
+        if (role == UserRole.doctor || role == UserRole.superAdmin)
+          _QuickActionData(
+            icon: Icons.note_add_rounded,
+            label: l10n.dashNewPrescription,
+            color: AppColors.info,
+            route: AppRoutes.prescriptions,
+          ),
+        if (role == UserRole.superAdmin || role == UserRole.clinicManager)
+          _QuickActionData(
+            icon: Icons.person_search_rounded,
+            label: l10n.navDoctors,
+            color: AppColors.warning,
+            route: AppRoutes.doctors,
+          ),
+        _QuickActionData(
+          icon: Icons.download_rounded,
+          label: l10n.dashViewAnalytics,
+          color: AppColors.accent,
+          route: AppRoutes.reports,
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final actions = _buildActions(role);
+    final l10n = AppLocalizations.of(context)!;
+    final actions = _buildActions(role, l10n);
 
     return Container(
       padding: const EdgeInsets.all(AppConstants.space5),
@@ -470,7 +483,7 @@ class DashboardQuickActionsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Quick Actions',
+            l10n.dashQuickActions,
             style: AppTypography.headingSm(
               color: isDark
                   ? AppColors.darkTextPrimary
@@ -514,6 +527,7 @@ class _QuickActionButtonState extends State<_QuickActionButton> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -559,7 +573,9 @@ class _QuickActionButtonState extends State<_QuickActionButton> {
               ),
               const Spacer(),
               Icon(
-                Icons.arrow_forward_ios_rounded,
+                isRtl
+                    ? Icons.arrow_back_ios_rounded
+                    : Icons.arrow_forward_ios_rounded,
                 size: 12,
                 color: isDark
                     ? AppColors.darkTextMuted

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -26,15 +27,16 @@ class ClinicTableView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppDataTable<ClinicEntity>(
       isLoading: isLoading,
       items: clinics,
-      searchHint: 'Search clinics by name, city...',
+      searchHint: l10n.clinicsSearchHint,
       onSearchChanged: onSearchChanged,
       columns: [
         DataTableColumn<ClinicEntity>(
-          title: 'Clinic Name',
+          title: l10n.clinicsName,
           builder: (c) => Row(
             children: [
               Container(
@@ -42,9 +44,7 @@ class ClinicTableView extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   gradient: AppColors.primaryGradient,
-                  borderRadius: BorderRadius.circular(
-                    AppConstants.radiusMd,
-                  ),
+                  borderRadius: BorderRadius.circular(AppConstants.radiusMd),
                 ),
                 child: const Icon(
                   Icons.local_hospital_rounded,
@@ -80,7 +80,7 @@ class ClinicTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<ClinicEntity>(
-          title: 'Location',
+          title: l10n.clinicsAddress,
           builder: (c) => Text(
             '${c.location.city}, ${c.location.governorate}',
             style: AppTypography.bodySm(
@@ -91,9 +91,9 @@ class ClinicTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<ClinicEntity>(
-          title: 'Doctors',
+          title: l10n.navDoctors,
           builder: (c) => Text(
-            '${c.totalDoctors} Doctors',
+            '${c.totalDoctors}',
             style: AppTypography.bodySm(
               color: isDark
                   ? AppColors.darkTextPrimary
@@ -102,7 +102,7 @@ class ClinicTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<ClinicEntity>(
-          title: 'Working Hours',
+          title: l10n.clinicsWorkingHours,
           builder: (c) => Text(
             c.workingHours,
             style: AppTypography.labelSm(
@@ -113,18 +113,18 @@ class ClinicTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<ClinicEntity>(
-          title: 'Actions',
+          title: l10n.commonActions,
           builder: (c) => Row(
             children: [
               IconButton(
                 icon: const Icon(Icons.map_outlined, size: 18),
                 onPressed: () => onShowLocation(c),
-                tooltip: 'View Location',
+                tooltip: l10n.clinicsViewLocation,
               ),
               IconButton(
                 icon: const Icon(Icons.edit_outlined, size: 18),
                 onPressed: () => onEdit(c),
-                tooltip: 'Edit Clinic',
+                tooltip: l10n.clinicsEdit,
               ),
               IconButton(
                 icon: const Icon(
@@ -133,7 +133,7 @@ class ClinicTableView extends StatelessWidget {
                   color: AppColors.error,
                 ),
                 onPressed: () => onDelete(c),
-                tooltip: 'Delete Clinic',
+                tooltip: l10n.commonDelete,
               ),
             ],
           ),

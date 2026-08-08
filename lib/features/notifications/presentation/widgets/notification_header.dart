@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -20,6 +21,7 @@ class NotificationHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,7 +34,7 @@ class NotificationHeader extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    'Notification Center',
+                    l10n.notifTitle,
                     style: AppTypography.headingXl(
                       color: isDark
                           ? AppColors.darkTextPrimary
@@ -55,10 +57,8 @@ class NotificationHeader extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            '${state.unreadCount} New',
-                            style: AppTypography.labelSm(
-                              color: Colors.white,
-                            ),
+                            '${state.unreadCount}',
+                            style: AppTypography.labelSm(color: Colors.white),
                           ),
                         );
                       }
@@ -69,7 +69,7 @@ class NotificationHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Broadcast announcements, system alerts & target notifications to doctors, patients or clinic managers',
+                l10n.notifSubtitle,
                 style: AppTypography.bodyMd(
                   color: isDark
                       ? AppColors.darkTextSecondary
@@ -83,13 +83,13 @@ class NotificationHeader extends StatelessWidget {
         Row(
           children: [
             SecondaryButton(
-              label: 'Mark All Read',
+              label: l10n.commonViewAll,
               leadingIcon: Icons.done_all_rounded,
               onPressed: onMarkAllRead,
             ),
             const SizedBox(width: 12),
             PrimaryButton(
-              label: 'Send Notification',
+              label: l10n.notifCreate,
               leadingIcon: Icons.send_rounded,
               onPressed: onSendNotification,
             ),

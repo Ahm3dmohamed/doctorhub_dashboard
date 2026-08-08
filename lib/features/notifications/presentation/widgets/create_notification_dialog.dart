@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../shared/widgets/app_modal_dialog.dart';
@@ -60,12 +61,13 @@ class _CreateNotificationDialogState
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final textColor = isDark
         ? AppColors.darkTextPrimary
         : AppColors.lightTextPrimary;
 
     return AppModalDialog(
-      title: 'Send Target Notification',
+      title: l10n.notifCreate,
       content: SizedBox(
         width: 500,
         child: Column(
@@ -74,19 +76,19 @@ class _CreateNotificationDialogState
           children: [
             AppTextField(
               controller: _titleCtrl,
-              label: 'Notification Title',
+              label: l10n.notifMessage,
               hint: 'e.g. System Maintenance Notice',
             ),
             const SizedBox(height: 12),
             AppTextField(
               controller: _bodyCtrl,
-              label: 'Message Body',
-              hint: 'Type the notification content...',
+              label: l10n.commonNotes,
+              hint: '...',
               maxLines: 3,
             ),
             const SizedBox(height: 12),
             Text(
-              'Notification Type:',
+              '${l10n.notifType}:',
               style: AppTypography.labelMd(color: textColor),
             ),
             const SizedBox(height: 4),
@@ -105,7 +107,7 @@ class _CreateNotificationDialogState
             ),
             const SizedBox(height: 12),
             Text(
-              'Target Audience:',
+              '${l10n.notifTarget}:',
               style: AppTypography.labelMd(color: textColor),
             ),
             const SizedBox(height: 4),
@@ -124,7 +126,7 @@ class _CreateNotificationDialogState
             ),
             const SizedBox(height: 20),
             PrimaryButton(
-              label: 'Broadcast Notification',
+              label: l10n.notifCreate,
               leadingIcon: Icons.send_rounded,
               onPressed: _submit,
             ),

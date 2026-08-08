@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -16,18 +17,26 @@ class AppointmentFilterTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final statusLabels = {
+      AppointmentStatus.upcoming: l10n.apptsUpcoming,
+      AppointmentStatus.completed: l10n.apptsCompleted,
+      AppointmentStatus.cancelled: l10n.apptsCancelled,
+      AppointmentStatus.pending: l10n.statusScheduled,
+    };
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
           _FilterTabPill(
-            label: 'All',
+            label: l10n.apptsAll,
             isSelected: selectedStatus == null,
             onTap: () => onStatusSelected(null),
           ),
           ...AppointmentStatus.values.map(
             (s) => _FilterTabPill(
-              label: s.displayName,
+              label: statusLabels[s] ?? s.displayName,
               isSelected: selectedStatus == s,
               onTap: () => onStatusSelected(s),
             ),

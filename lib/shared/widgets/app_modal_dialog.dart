@@ -1,10 +1,10 @@
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_typography.dart';
 import '../../core/constants/app_constants.dart';
 import 'primary_button.dart';
 
-/// Reusable Modal Dialog Wrapper for Forms & Confirmations
 class AppModalDialog extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -22,8 +22,8 @@ class AppModalDialog extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.content,
-    this.confirmLabel = 'Save',
-    this.cancelLabel = 'Cancel',
+    this.confirmLabel,
+    this.cancelLabel,
     this.onConfirm,
     this.onCancel,
     this.isConfirmLoading = false,
@@ -35,18 +35,21 @@ class AppModalDialog extends StatelessWidget {
     required BuildContext context,
     required String title,
     required String message,
-    String confirmLabel = 'Delete',
-    String cancelLabel = 'Cancel',
+    String? confirmLabel,
+    String? cancelLabel,
     bool isDestructive = true,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       builder: (ctx) => AppModalDialog(
         title: title,
         subtitle: message,
         isDestructive: isDestructive,
-        confirmLabel: confirmLabel,
-        cancelLabel: cancelLabel,
+        confirmLabel:
+            confirmLabel ??
+            (isDestructive ? l10n.commonDelete : l10n.commonConfirm),
+        cancelLabel: cancelLabel ?? l10n.commonCancel,
         onConfirm: () => Navigator.of(ctx).pop(true),
         onCancel: () => Navigator.of(ctx).pop(false),
         content: const SizedBox.shrink(),
@@ -57,6 +60,14 @@ class AppModalDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
+
+    final resolvedConfirm =
+        confirmLabel ??
+        (isDestructive
+            ? (l10n?.commonDelete ?? 'Delete')
+            : (l10n?.commonSave ?? 'Save'));
+    final resolvedCancel = cancelLabel ?? (l10n?.commonCancel ?? 'Cancel');
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -150,17 +161,18 @@ class AppModalDialog extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (cancelLabel != null)
+                    if (cancelLabel != null || onCancel != null)
                       SecondaryButton(
-                        label: cancelLabel!,
+                        label: resolvedCancel,
                         width: 100,
                         height: 40,
-                        onPressed: onCancel ?? () => Navigator.of(context).pop(),
+                        onPressed:
+                            onCancel ?? () => Navigator.of(context).pop(),
                       ),
                     if (onConfirm != null) ...[
                       const SizedBox(width: AppConstants.space3),
                       PrimaryButton(
-                        label: confirmLabel ?? 'Confirm',
+                        label: resolvedConfirm,
                         width: 120,
                         height: 40,
                         isLoading: isConfirmLoading,

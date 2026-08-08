@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
@@ -38,15 +39,16 @@ class _RescheduleAppointmentDialogState
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppModalDialog(
-      title: 'Reschedule Appointment',
-      subtitle: 'Change consultation date for ${widget.appointment.patientName}',
+      title: l10n.apptsReschedule,
+      subtitle: widget.appointment.patientName,
       onConfirm: _submit,
       content: Column(
         children: [
           Text(
-            'Current Schedule: ${DateFormat('MMM dd, yyyy • hh:mm a').format(widget.appointment.dateTime)}',
+            '${l10n.apptsDateTime}: ${DateFormat('MMM dd, yyyy • hh:mm a').format(widget.appointment.dateTime)}',
             style: AppTypography.labelMd(
               color: isDark
                   ? AppColors.darkTextPrimary

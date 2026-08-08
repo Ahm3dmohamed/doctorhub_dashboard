@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../shared/widgets/primary_button.dart';
@@ -14,6 +15,7 @@ class ClinicHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,7 +26,7 @@ class ClinicHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Clinics Directory',
+                l10n.clinicsTitle,
                 style: AppTypography.headingXl(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -33,7 +35,7 @@ class ClinicHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Manage clinic branches, locations, and accepted insurance plans',
+                l10n.clinicsSubtitle,
                 style: AppTypography.bodyMd(
                   color: isDark
                       ? AppColors.darkTextSecondary
@@ -45,7 +47,7 @@ class ClinicHeader extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         PrimaryButton(
-          label: 'Add Clinic',
+          label: l10n.clinicsAdd,
           leadingIcon: Icons.add_business_rounded,
           onPressed: onAddClinic,
         ),

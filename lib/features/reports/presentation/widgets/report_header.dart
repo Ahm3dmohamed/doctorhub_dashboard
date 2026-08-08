@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../shared/widgets/primary_button.dart';
@@ -10,6 +11,7 @@ class ReportHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -19,7 +21,7 @@ class ReportHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Reports & Executive Analytics',
+                l10n.reportsTitle,
                 style: AppTypography.headingXl(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -28,7 +30,7 @@ class ReportHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Track platform revenue, doctor/clinic performance KPIs and patient growth metrics',
+                l10n.reportsSubtitle,
                 style: AppTypography.bodyMd(
                   color: isDark
                       ? AppColors.darkTextSecondary
@@ -42,25 +44,21 @@ class ReportHeader extends StatelessWidget {
         Row(
           children: [
             SecondaryButton(
-              label: 'Export Excel',
+              label: l10n.reportsExportExcel,
               leadingIcon: Icons.table_view_rounded,
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Exporting report as Excel spreadsheet...'),
-                  ),
+                  SnackBar(content: Text(l10n.reportsExportExcel)),
                 );
               },
             ),
             const SizedBox(width: 12),
             PrimaryButton(
-              label: 'Export PDF Report',
+              label: l10n.reportsExportPdf,
               leadingIcon: Icons.picture_as_pdf_rounded,
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Generating executive PDF report...'),
-                  ),
+                  SnackBar(content: Text(l10n.reportsExportPdf)),
                 );
               },
             ),
