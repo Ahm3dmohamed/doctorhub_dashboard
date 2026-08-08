@@ -39,8 +39,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
       vsync: this,
       duration: AppConstants.animSlow,
     )..forward();
-    _fadeAnimation =
-        CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -57,9 +59,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     context.read<AuthCubit>().resetPassword(
-          token: _tokenController.text.trim(),
-          newPassword: _passwordController.text,
-        );
+      token: _tokenController.text.trim(),
+      newPassword: _passwordController.text,
+    );
   }
 
   @override
@@ -131,12 +133,18 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.arrow_back_rounded,
-                          size: 16, color: AppColors.darkTextSecondary),
+                      const Icon(
+                        Icons.arrow_back_rounded,
+                        size: 16,
+                        color: AppColors.darkTextSecondary,
+                      ),
                       const SizedBox(width: 6),
-                      Text('Back',
-                          style: AppTypography.bodySm(
-                              color: AppColors.darkTextSecondary)),
+                      Text(
+                        'Back',
+                        style: AppTypography.bodySm(
+                          color: AppColors.darkTextSecondary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -151,14 +159,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                     gradient: AppColors.primaryGradient,
                     borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                   ),
-                  child: const Icon(Icons.lock_reset_rounded,
-                      color: Colors.white, size: 26),
+                  child: const Icon(
+                    Icons.lock_reset_rounded,
+                    color: Colors.white,
+                    size: 26,
+                  ),
                 ),
 
                 const SizedBox(height: AppConstants.space5),
 
-                Text('Set new password',
-                    style: AppTypography.headingXl(color: Colors.white)),
+                Text(
+                  'Set new password',
+                  style: AppTypography.headingXl(color: Colors.white),
+                ),
 
                 const SizedBox(height: AppConstants.space2),
 
@@ -166,14 +179,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                   RichText(
                     text: TextSpan(
                       style: AppTypography.bodyMd(
-                          color: AppColors.darkTextSecondary),
+                        color: AppColors.darkTextSecondary,
+                      ),
                       children: [
                         const TextSpan(text: 'Reset code was sent to '),
                         TextSpan(
                           text: widget.email,
                           style: const TextStyle(
-                              color: AppColors.primaryLight,
-                              fontWeight: FontWeight.w600),
+                            color: AppColors.primaryLight,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
@@ -182,7 +197,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                   Text(
                     'Enter the reset code sent to your email.',
                     style: AppTypography.bodyMd(
-                        color: AppColors.darkTextSecondary),
+                      color: AppColors.darkTextSecondary,
+                    ),
                   ),
 
                 const SizedBox(height: AppConstants.space6),
@@ -230,7 +246,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                   obscureText: true,
                   prefixIcon: Icons.lock_outline_rounded,
                   textInputAction: TextInputAction.done,
-                  validator: Validators.confirmPassword(_passwordController.text),
+                  validator: Validators.confirmPassword(
+                    _passwordController.text,
+                  ),
                   onFieldSubmitted: (_) => _onSubmit(),
                   enabled: !isLoading,
                 ),
@@ -259,8 +277,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.check_circle_rounded,
-                color: AppColors.success, size: 20),
+            const Icon(
+              Icons.check_circle_rounded,
+              color: AppColors.success,
+              size: 20,
+            ),
             const SizedBox(width: 10),
             Text(
               'Password reset successfully!',
@@ -271,7 +292,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
         backgroundColor: AppColors.neutral900,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.radiusLg)),
+          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+        ),
       ),
     );
     context.go(AppRoutes.login);
@@ -307,7 +329,10 @@ class _HintChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.radiusFull),
         border: Border.all(color: AppColors.darkBorder),
       ),
-      child: Text(label, style: AppTypography.labelSm(color: AppColors.darkTextSecondary)),
+      child: Text(
+        label,
+        style: AppTypography.labelSm(color: AppColors.darkTextSecondary),
+      ),
     );
   }
 }

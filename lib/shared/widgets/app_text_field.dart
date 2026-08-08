@@ -92,8 +92,8 @@ class _AppTextFieldState extends State<AppTextField> {
               color: _isFocused
                   ? (isDark ? AppColors.primaryLight : AppColors.primary)
                   : (isDark
-                      ? AppColors.darkTextSecondary
-                      : AppColors.lightTextSecondary),
+                        ? const Color.fromARGB(255, 237, 237, 240)
+                        : const Color.fromARGB(255, 5, 33, 65)),
             ),
           ),
         ),
@@ -129,7 +129,9 @@ class _AppTextFieldState extends State<AppTextField> {
             onChanged: widget.onChanged,
             onFieldSubmitted: widget.onFieldSubmitted,
             style: AppTypography.bodyMd(
-              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+              color: isDark
+                  ? AppColors.darkTextPrimary
+                  : AppColors.lightTextPrimary,
             ),
             decoration: InputDecoration(
               hintText: widget.hint,
@@ -139,23 +141,26 @@ class _AppTextFieldState extends State<AppTextField> {
                       widget.prefixIcon,
                       size: 18,
                       color: _isFocused
-                          ? (isDark ? AppColors.primaryLight : AppColors.primary)
+                          ? (isDark
+                                ? AppColors.primaryLight
+                                : AppColors.primary)
                           : (isDark
-                              ? AppColors.darkTextSecondary
-                              : AppColors.neutral400),
+                                ? const Color.fromARGB(255, 237, 237, 240)
+                                : const Color.fromARGB(255, 5, 33, 65)),
                     )
                   : null,
               suffixIcon: widget.obscureText
                   ? IconButton(
-                      onPressed: () => setState(() => _isObscured = !_isObscured),
+                      onPressed: () =>
+                          setState(() => _isObscured = !_isObscured),
                       icon: Icon(
                         _isObscured
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
                         size: 18,
                         color: isDark
-                            ? AppColors.darkTextSecondary
-                            : AppColors.neutral400,
+                            ? const Color.fromARGB(255, 237, 237, 240)
+                            : const Color.fromARGB(255, 5, 33, 65),
                       ),
                     )
                   : widget.suffixWidget,

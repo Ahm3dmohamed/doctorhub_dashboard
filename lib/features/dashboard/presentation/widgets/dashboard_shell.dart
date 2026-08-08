@@ -11,7 +11,6 @@ import '../../../auth/presentation/cubit/auth_state.dart';
 import 'dashboard_shared_widgets.dart';
 import 'dashboard_sidebar.dart';
 
-/// Outer shell layout containing sidebar, topbar, mobile drawer and navbar.
 class DashboardShell extends StatefulWidget {
   final Widget child;
 
@@ -70,7 +69,9 @@ class _DashboardShellState extends State<DashboardShell> {
               : AppColors.lightBackground,
           drawer: Responsive.isMobile(context)
               ? Drawer(
-                  backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                  backgroundColor: isDark
+                      ? AppColors.darkSurface
+                      : AppColors.lightSurface,
                   child: DashboardSidebar(
                     user: user,
                     isCollapsed: false,
