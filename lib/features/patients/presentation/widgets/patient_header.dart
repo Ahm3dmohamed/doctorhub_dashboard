@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../shared/widgets/primary_button.dart';
@@ -6,14 +7,12 @@ import '../../../../shared/widgets/primary_button.dart';
 class PatientHeader extends StatelessWidget {
   final VoidCallback onAddPatient;
 
-  const PatientHeader({
-    super.key,
-    required this.onAddPatient,
-  });
+  const PatientHeader({super.key, required this.onAddPatient});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,7 +23,7 @@ class PatientHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Patient Directory',
+                l10n.patientsTitle,
                 style: AppTypography.headingXl(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -33,7 +32,7 @@ class PatientHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Manage patient medical records, allergies, and emergency contacts',
+                l10n.patientsSubtitle,
                 style: AppTypography.bodyMd(
                   color: isDark
                       ? AppColors.darkTextSecondary
@@ -45,7 +44,7 @@ class PatientHeader extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         PrimaryButton(
-          label: 'Add Patient',
+          label: l10n.patientsAdd,
           leadingIcon: Icons.person_add_rounded,
           onPressed: onAddPatient,
         ),

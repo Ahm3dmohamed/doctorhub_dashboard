@@ -1,20 +1,22 @@
-import 'package:doctorhub_dashboard/app/router/app_router.dart';
-import 'package:doctorhub_dashboard/app/theme/app_colors.dart';
-import 'package:doctorhub_dashboard/app/theme/app_typography.dart';
-import 'package:doctorhub_dashboard/core/constants/app_constants.dart';
-import 'package:doctorhub_dashboard/core/utils/validators.dart';
-import 'package:doctorhub_dashboard/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:doctorhub_dashboard/features/auth/presentation/cubit/auth_state.dart';
-import 'package:doctorhub_dashboard/features/auth/presentation/pages/widgets/build_footer.dart';
-import 'package:doctorhub_dashboard/features/auth/presentation/pages/widgets/build_header.dart';
-import 'package:doctorhub_dashboard/features/auth/presentation/pages/widgets/quik_fill_chip.dart';
-import 'package:doctorhub_dashboard/features/auth/presentation/pages/widgets/remember_me_chckbox.dart';
-import 'package:doctorhub_dashboard/shared/widgets/app_error_widget.dart';
-import 'package:doctorhub_dashboard/shared/widgets/app_text_field.dart';
-import 'package:doctorhub_dashboard/shared/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../../app/router/app_router.dart';
+import '../../../../../app/theme/app_colors.dart';
+import '../../../../../app/theme/app_typography.dart';
+import '../../../../../core/constants/app_constants.dart';
+import '../../../../../core/utils/validators.dart';
+import '../../../../../shared/widgets/app_error_widget.dart';
+import '../../../../../shared/widgets/app_text_field.dart';
+import '../../../../../shared/widgets/primary_button.dart';
+import '../../cubit/auth_cubit.dart';
+import '../../cubit/auth_state.dart';
+import 'build_footer.dart';
+import 'build_header.dart';
+import 'quik_fill_chip.dart';
+import 'remember_me_chckbox.dart';
 
 class FormBuildWidget extends StatefulWidget {
   const FormBuildWidget({super.key});
@@ -65,6 +67,9 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         final isLoading = state is AuthLoading;
@@ -74,9 +79,9 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              buildHeader(),
+              buildHeader(context),
               const SizedBox(height: AppConstants.space8),
-              buildQuickFillChips(),
+              buildQuickFillChips(l10n),
 
               const SizedBox(height: AppConstants.space6),
 
@@ -90,13 +95,13 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
 
               AppTextField(
                 controller: _emailController,
-                label: 'Email Address',
+                label: l10n.commonEmail,
                 hint: 'you@example.com',
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 prefixIcon: Icons.mail_outline_rounded,
                 focusNode: _emailFocus,
-                validator: Validators.email,
+                validator: (val) => Validators.email(val, l10n),
                 onFieldSubmitted: (_) => _passwordFocus.requestFocus(),
                 enabled: !isLoading,
               ),
@@ -105,13 +110,13 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
 
               AppTextField(
                 controller: _passwordController,
-                label: 'Password',
+                label: l10n.authPassword,
                 hint: '••••••••',
                 obscureText: true,
                 textInputAction: TextInputAction.done,
                 prefixIcon: Icons.lock_outline_rounded,
                 focusNode: _passwordFocus,
-                validator: Validators.loginPassword,
+                validator: (val) => Validators.loginPassword(val, l10n),
                 onFieldSubmitted: (_) => _onLoginPressed(),
                 enabled: !isLoading,
               ),
@@ -137,7 +142,7 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      'Forgot password?',
+                      l10n.authForgotPassword,
                       style: AppTypography.bodySm(
                         color: AppColors.primaryLight,
                         weight: FontWeight.w500,
@@ -150,16 +155,19 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
               const SizedBox(height: AppConstants.space6),
 
               PrimaryButton.large(
-                label: 'Sign In',
+                label: l10n.authSignIn,
                 onPressed: isLoading ? null : _onLoginPressed,
                 isLoading: isLoading,
-                trailingIcon: isLoading ? null : Icons.arrow_forward_rounded,
+                trailingIcon: isLoading
+                    ? null
+                    : (isRtl
+                          ? Icons.arrow_back_rounded
+                          : Icons.arrow_forward_rounded),
               ),
 
               const SizedBox(height: AppConstants.space6),
 
-              // ── Footer ─────────────────────────────────────────────────
-              buildFooter(),
+              buildFooter(context),
             ],
           ),
         );
@@ -167,17 +175,22 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
     );
   }
 
-  Widget buildQuickFillChips() {
-    const quickFills = [
+  Widget buildQuickFillChips(AppLocalizations l10n) {
+    final quickFills = [
       (
-        'Super Admin',
+        l10n.authSuperAdmin,
         'admin@doctorhub.com',
         'Admin123',
         AppColors.superAdminColor,
       ),
-      ('Doctor', 'doctor@doctorhub.com', 'Doctor123', AppColors.doctorColor),
       (
-        'Clinic Manager',
+        l10n.authDoctor,
+        'doctor@doctorhub.com',
+        'Doctor123',
+        AppColors.doctorColor,
+      ),
+      (
+        l10n.authClinicManager,
         'manager@doctorhub.com',
         'Manager123',
         AppColors.clinicManagerColor,
@@ -187,7 +200,7 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Quick sign-in (demo)',
+          l10n.authSelectRole,
           style: AppTypography.labelMd(color: AppColors.darkTextSecondary),
         ),
         const SizedBox(height: AppConstants.space2),

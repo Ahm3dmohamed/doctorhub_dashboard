@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -104,6 +105,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
   }
 
   Widget _buildCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
     return Container(
       padding: const EdgeInsets.all(AppConstants.space8),
       decoration: BoxDecoration(
@@ -127,20 +131,21 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Back button
                 GestureDetector(
                   onTap: () => context.go(AppRoutes.forgotPassword),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
-                        Icons.arrow_back_rounded,
+                      Icon(
+                        isRtl
+                            ? Icons.arrow_forward_rounded
+                            : Icons.arrow_back_rounded,
                         size: 16,
                         color: AppColors.darkTextSecondary,
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'Back',
+                        l10n.commonBack,
                         style: AppTypography.bodySm(
                           color: AppColors.darkTextSecondary,
                         ),
@@ -151,7 +156,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
 
                 const SizedBox(height: AppConstants.space8),
 
-                // Icon
                 Container(
                   width: 52,
                   height: 52,
@@ -169,37 +173,18 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                 const SizedBox(height: AppConstants.space5),
 
                 Text(
-                  'Set new password',
+                  l10n.authResetPasswordTitle,
                   style: AppTypography.headingXl(color: Colors.white),
                 ),
 
                 const SizedBox(height: AppConstants.space2),
 
-                if (widget.email != null)
-                  RichText(
-                    text: TextSpan(
-                      style: AppTypography.bodyMd(
-                        color: AppColors.darkTextSecondary,
-                      ),
-                      children: [
-                        const TextSpan(text: 'Reset code was sent to '),
-                        TextSpan(
-                          text: widget.email,
-                          style: const TextStyle(
-                            color: AppColors.primaryLight,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                else
-                  Text(
-                    'Enter the reset code sent to your email.',
-                    style: AppTypography.bodyMd(
-                      color: AppColors.darkTextSecondary,
-                    ),
+                Text(
+                  l10n.authResetPasswordSubtitle,
+                  style: AppTypography.bodyMd(
+                    color: AppColors.darkTextSecondary,
                   ),
+                ),
 
                 const SizedBox(height: AppConstants.space6),
 
@@ -211,56 +196,53 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
                   const SizedBox(height: AppConstants.space4),
                 ],
 
-                // Token
                 AppTextField(
                   controller: _tokenController,
-                  label: 'Reset Code',
-                  hint: 'Enter 6-character code',
+                  label: l10n.authResetCode,
+                  hint: '6-digit code',
                   prefixIcon: Icons.key_rounded,
                   textInputAction: TextInputAction.next,
-                  validator: Validators.resetToken,
+                  validator: (val) => Validators.resetToken(val, l10n),
                   enabled: !isLoading,
                 ),
 
                 const SizedBox(height: AppConstants.space4),
 
-                // New Password
                 AppTextField(
                   controller: _passwordController,
-                  label: 'New Password',
+                  label: l10n.authNewPassword,
                   hint: '••••••••',
                   obscureText: true,
                   prefixIcon: Icons.lock_outline_rounded,
                   textInputAction: TextInputAction.next,
-                  validator: Validators.password,
+                  validator: (val) => Validators.password(val, l10n),
                   enabled: !isLoading,
                 ),
 
                 const SizedBox(height: AppConstants.space4),
 
-                // Confirm Password
                 AppTextField(
                   controller: _confirmController,
-                  label: 'Confirm Password',
+                  label: l10n.authConfirmPassword,
                   hint: '••••••••',
                   obscureText: true,
                   prefixIcon: Icons.lock_outline_rounded,
                   textInputAction: TextInputAction.done,
-                  validator: Validators.confirmPassword(
+                  validator: (val) => Validators.confirmPassword(
                     _passwordController.text,
-                  ),
+                    l10n,
+                  )(val),
                   onFieldSubmitted: (_) => _onSubmit(),
                   enabled: !isLoading,
                 ),
 
-                // Password strength hint
                 const SizedBox(height: AppConstants.space3),
                 _PasswordStrengthHint(),
 
                 const SizedBox(height: AppConstants.space6),
 
                 PrimaryButton.large(
-                  label: 'Reset Password',
+                  label: l10n.authResetPasswordBtn,
                   onPressed: isLoading ? null : _onSubmit,
                   isLoading: isLoading,
                 ),
@@ -273,6 +255,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
   }
 
   void _showSuccessAndNavigate(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -284,7 +267,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage>
             ),
             const SizedBox(width: 10),
             Text(
-              'Password reset successfully!',
+              l10n.authResetSuccess,
               style: AppTypography.bodyMd(color: Colors.white),
             ),
           ],
@@ -306,7 +289,7 @@ class _PasswordStrengthHint extends StatelessWidget {
     return Wrap(
       spacing: AppConstants.space2,
       runSpacing: AppConstants.space1,
-      children: [
+      children: const [
         _HintChip(label: '8+ chars'),
         _HintChip(label: 'Uppercase'),
         _HintChip(label: 'Number'),

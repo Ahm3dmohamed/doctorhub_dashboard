@@ -1,7 +1,7 @@
-import 'package:doctorhub_dashboard/app/theme/app_colors.dart';
-import 'package:doctorhub_dashboard/app/theme/app_typography.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
+import '../../../../../app/theme/app_colors.dart';
+import '../../../../../app/theme/app_typography.dart';
 
 class RememberMeCheckbox extends StatelessWidget {
   final bool value;
@@ -15,6 +15,8 @@ class RememberMeCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onTap: onChanged != null ? () => onChanged!(!value) : null,
       child: Row(
@@ -31,17 +33,11 @@ class RememberMeCheckbox extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            'Remember me',
+            l10n.authRememberMe,
             style: AppTypography.bodySm(color: AppColors.darkTextSecondary),
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<bool>('value', value));
   }
 }

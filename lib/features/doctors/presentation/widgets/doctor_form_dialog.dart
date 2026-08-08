@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/widgets/app_modal_dialog.dart';
 import '../../../../shared/widgets/app_text_field.dart';
@@ -33,12 +34,8 @@ class _DoctorFormDialogState extends State<DoctorFormDialog> {
     _nameCtrl = TextEditingController(text: doc?.name);
     _emailCtrl = TextEditingController(text: doc?.email);
     _phoneCtrl = TextEditingController(text: doc?.phone);
-    _specialtyCtrl = TextEditingController(
-      text: doc?.specialty ?? 'Cardiology',
-    );
-    _clinicCtrl = TextEditingController(
-      text: doc?.clinicName ?? 'Central Heart Institute',
-    );
+    _specialtyCtrl = TextEditingController(text: doc?.specialty ?? 'Cardiology');
+    _clinicCtrl = TextEditingController(text: doc?.clinicName ?? 'Central Heart Institute');
     _bioCtrl = TextEditingController(text: doc?.bio);
   }
 
@@ -58,12 +55,8 @@ class _DoctorFormDialogState extends State<DoctorFormDialog> {
     final newDoctor = DoctorEntity(
       id: doc?.id ?? '',
       name: _nameCtrl.text.isEmpty ? 'Dr. New Doctor' : _nameCtrl.text,
-      email: _emailCtrl.text.isEmpty
-          ? 'doctor@doctorhub.com'
-          : _emailCtrl.text,
-      phone: _phoneCtrl.text.isEmpty
-          ? '+1 (555) 000-0000'
-          : _phoneCtrl.text,
+      email: _emailCtrl.text.isEmpty ? 'doctor@doctorhub.com' : _emailCtrl.text,
+      phone: _phoneCtrl.text.isEmpty ? '+1 (555) 000-0000' : _phoneCtrl.text,
       specialty: _specialtyCtrl.text,
       clinicName: _clinicCtrl.text,
       rating: doc?.rating ?? 5.0,
@@ -80,47 +73,48 @@ class _DoctorFormDialogState extends State<DoctorFormDialog> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.doctor != null;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppModalDialog(
-      title: isEditing ? 'Edit Doctor' : 'Add New Doctor',
-      subtitle: 'Enter doctor details and specialty information.',
+      title: isEditing ? l10n.doctorsEdit : l10n.doctorsAdd,
+      subtitle: l10n.doctorsSubtitle,
       onConfirm: _submit,
       content: Column(
         children: [
           AppTextField(
             controller: _nameCtrl,
-            label: 'Full Name',
+            label: l10n.commonName,
             hint: 'Dr. John Doe',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _emailCtrl,
-            label: 'Email Address',
+            label: l10n.commonEmail,
             hint: 'doctor@example.com',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _phoneCtrl,
-            label: 'Phone Number',
+            label: l10n.commonPhone,
             hint: '+1 (555) 000-0000',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _specialtyCtrl,
-            label: 'Specialty',
+            label: l10n.doctorsSpecialty,
             hint: 'Cardiology',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _clinicCtrl,
-            label: 'Clinic Name',
+            label: l10n.clinicsName,
             hint: 'Central Hospital',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _bioCtrl,
-            label: 'Bio / Profile Summary',
-            hint: 'Specialist in...',
+            label: l10n.doctorsBio,
+            hint: '...',
             maxLines: 3,
           ),
         ],

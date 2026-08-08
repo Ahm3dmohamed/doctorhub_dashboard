@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../shared/widgets/primary_button.dart';
@@ -14,6 +15,7 @@ class DoctorHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,7 +26,7 @@ class DoctorHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Doctors Management',
+                l10n.doctorsTitle,
                 style: AppTypography.headingXl(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -33,7 +35,7 @@ class DoctorHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Manage doctor profiles, specialties, and working hours',
+                l10n.doctorsSubtitle,
                 style: AppTypography.bodyMd(
                   color: isDark
                       ? AppColors.darkTextSecondary
@@ -45,7 +47,7 @@ class DoctorHeader extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         PrimaryButton(
-          label: 'Add Doctor',
+          label: l10n.doctorsAdd,
           leadingIcon: Icons.add_rounded,
           onPressed: onAddDoctor,
         ),

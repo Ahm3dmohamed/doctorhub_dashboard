@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_text_field.dart';
 
 class PrescriptionSearchField extends StatelessWidget {
@@ -13,10 +14,12 @@ class PrescriptionSearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AppTextField(
       controller: controller,
-      label: 'Search Prescriptions',
-      hint: 'Search prescription by patient, doctor, medicine or Rx ID...',
+      label: l10n.rxTitle,
+      hint: l10n.rxSearchHint,
       prefixIcon: Icons.search_rounded,
       onChanged: onChanged,
     );

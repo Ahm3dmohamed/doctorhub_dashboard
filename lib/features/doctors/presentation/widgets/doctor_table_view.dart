@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -32,17 +33,16 @@ class DoctorTableView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppDataTable<DoctorEntity>(
       isLoading: isLoading,
       items: doctors,
-      searchHint: 'Search doctors by name, specialty...',
+      searchHint: l10n.doctorsSearchHint,
       onSearchChanged: onSearchChanged,
       filterWidget: DropdownButton<String>(
         value: selectedSpecialty,
-        dropdownColor: isDark
-            ? AppColors.darkSurface
-            : AppColors.lightSurface,
+        dropdownColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         underline: const SizedBox.shrink(),
         items: specialties
             .map(
@@ -63,19 +63,15 @@ class DoctorTableView extends StatelessWidget {
       ),
       columns: [
         DataTableColumn<DoctorEntity>(
-          title: 'Doctor',
+          title: l10n.navDoctors,
           builder: (doc) => Row(
             children: [
               CircleAvatar(
                 radius: 18,
-                backgroundColor: AppColors.primary.withValues(
-                  alpha: 0.15,
-                ),
+                backgroundColor: AppColors.primary.withValues(alpha: 0.15),
                 child: Text(
                   doc.initials,
-                  style: AppTypography.labelSm(
-                    color: AppColors.primary,
-                  ),
+                  style: AppTypography.labelSm(color: AppColors.primary),
                 ),
               ),
               const SizedBox(width: 12),
@@ -106,28 +102,21 @@ class DoctorTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<DoctorEntity>(
-          title: 'Specialty',
+          title: l10n.doctorsSpecialty,
           builder: (doc) => Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 4,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(
-                AppConstants.radiusFull,
-              ),
+              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
             ),
             child: Text(
               doc.specialty,
-              style: AppTypography.labelSm(
-                color: AppColors.primary,
-              ),
+              style: AppTypography.labelSm(color: AppColors.primary),
             ),
           ),
         ),
         DataTableColumn<DoctorEntity>(
-          title: 'Clinic',
+          title: l10n.navClinics,
           builder: (doc) => Text(
             doc.clinicName,
             style: AppTypography.bodySm(
@@ -138,14 +127,10 @@ class DoctorTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<DoctorEntity>(
-          title: 'Rating',
+          title: l10n.clinicsRating,
           builder: (doc) => Row(
             children: [
-              const Icon(
-                Icons.star_rounded,
-                size: 16,
-                color: Colors.amber,
-              ),
+              const Icon(Icons.star_rounded, size: 16, color: Colors.amber),
               const SizedBox(width: 4),
               Text(
                 doc.rating.toString(),
@@ -160,46 +145,34 @@ class DoctorTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<DoctorEntity>(
-          title: 'Status',
+          title: l10n.commonStatus,
           builder: (doc) => Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 3,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
-              color: doc.isAvailable
-                  ? AppColors.successLight
-                  : AppColors.errorLight,
-              borderRadius: BorderRadius.circular(
-                AppConstants.radiusFull,
-              ),
+              color: doc.isAvailable ? AppColors.successLight : AppColors.errorLight,
+              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
             ),
             child: Text(
-              doc.isAvailable ? 'Available' : 'Unavailable',
+              doc.isAvailable ? l10n.doctorsAvailability : 'N/A',
               style: AppTypography.labelSm(
-                color: doc.isAvailable
-                    ? AppColors.successDark
-                    : AppColors.errorDark,
+                color: doc.isAvailable ? AppColors.successDark : AppColors.errorDark,
               ),
             ),
           ),
         ),
         DataTableColumn<DoctorEntity>(
-          title: 'Actions',
+          title: l10n.commonActions,
           builder: (doc) => Row(
             children: [
               IconButton(
-                icon: const Icon(
-                  Icons.visibility_outlined,
-                  size: 18,
-                ),
+                icon: const Icon(Icons.visibility_outlined, size: 18),
                 onPressed: () => onViewDetails(doc),
-                tooltip: 'View Details',
+                tooltip: l10n.commonDetails,
               ),
               IconButton(
                 icon: const Icon(Icons.edit_outlined, size: 18),
                 onPressed: () => onEdit(doc),
-                tooltip: 'Edit Doctor',
+                tooltip: l10n.doctorsEdit,
               ),
               IconButton(
                 icon: const Icon(
@@ -208,7 +181,7 @@ class DoctorTableView extends StatelessWidget {
                   color: AppColors.error,
                 ),
                 onPressed: () => onDelete(doc),
-                tooltip: 'Delete Doctor',
+                tooltip: l10n.commonDelete,
               ),
             ],
           ),

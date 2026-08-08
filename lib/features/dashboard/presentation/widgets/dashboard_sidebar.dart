@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
+import '../../../../app/cubit/locale_cubit.dart';
 import '../../../../app/cubit/theme_cubit.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -23,62 +24,63 @@ class DashboardSidebar extends StatelessWidget {
     required this.onToggle,
   });
 
-  List<DashboardNavItem> _buildNavItems(UserRole role) => [
-        const DashboardNavItem(
+  List<DashboardNavItem> _buildNavItems(UserRole role, AppLocalizations l10n) =>
+      [
+        DashboardNavItem(
           icon: Icons.grid_view_rounded,
-          label: 'Dashboard',
+          label: l10n.navDashboard,
           route: AppRoutes.dashboard,
         ),
         if (role == UserRole.superAdmin || role == UserRole.doctor)
-          const DashboardNavItem(
+          DashboardNavItem(
             icon: Icons.people_rounded,
-            label: 'Patients',
+            label: l10n.navPatients,
             route: AppRoutes.patients,
           ),
         if (role == UserRole.superAdmin || role == UserRole.doctor)
-          const DashboardNavItem(
+          DashboardNavItem(
             icon: Icons.calendar_month_rounded,
-            label: 'Appointments',
+            label: l10n.navAppointments,
             route: AppRoutes.appointments,
           ),
         if (role == UserRole.superAdmin || role == UserRole.clinicManager)
-          const DashboardNavItem(
+          DashboardNavItem(
             icon: Icons.local_hospital_rounded,
-            label: 'Clinics',
+            label: l10n.navClinics,
             route: AppRoutes.clinics,
           ),
         if (role == UserRole.superAdmin)
-          const DashboardNavItem(
+          DashboardNavItem(
             icon: Icons.medical_services_rounded,
-            label: 'Doctors',
+            label: l10n.navDoctors,
             route: AppRoutes.doctors,
           ),
         if (role == UserRole.superAdmin || role == UserRole.doctor)
-          const DashboardNavItem(
+          DashboardNavItem(
             icon: Icons.medical_information_rounded,
-            label: 'Medical Records',
+            label: l10n.navMedicalRecords,
             route: AppRoutes.medicalRecords,
           ),
         if (role == UserRole.superAdmin || role == UserRole.doctor)
-          const DashboardNavItem(
+          DashboardNavItem(
             icon: Icons.medication_rounded,
-            label: 'Prescriptions',
+            label: l10n.navPrescriptions,
             route: AppRoutes.prescriptions,
           ),
-        const DashboardNavItem(
+        DashboardNavItem(
           icon: Icons.rate_review_rounded,
-          label: 'Reviews',
+          label: l10n.navReviews,
           route: AppRoutes.reviews,
         ),
-        const DashboardNavItem(
+        DashboardNavItem(
           icon: Icons.notifications_rounded,
-          label: 'Notifications',
+          label: l10n.navNotifications,
           route: AppRoutes.notifications,
         ),
         if (role == UserRole.superAdmin || role == UserRole.clinicManager)
-          const DashboardNavItem(
+          DashboardNavItem(
             icon: Icons.analytics_rounded,
-            label: 'Reports & Analytics',
+            label: l10n.navReports,
             route: AppRoutes.reports,
           ),
       ];
@@ -86,7 +88,8 @@ class DashboardSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final navItems = _buildNavItems(user.role);
+    final l10n = AppLocalizations.of(context)!;
+    final navItems = _buildNavItems(user.role, l10n);
     final currentLocation = GoRouterState.of(context).matchedLocation;
 
     return Container(
@@ -110,7 +113,8 @@ class DashboardSidebar extends StatelessWidget {
               itemCount: navItems.length,
               itemBuilder: (context, i) {
                 final item = navItems[i];
-                final isSelected = item.route != null && currentLocation == item.route;
+                final isSelected =
+                    item.route != null && currentLocation == item.route;
                 return _SidebarNavItem(
                   item: item,
                   isSelected: isSelected,
@@ -131,6 +135,7 @@ class DashboardSidebar extends StatelessWidget {
             user: user,
             isCollapsed: isCollapsed,
             onThemeToggle: () => context.read<ThemeCubit>().toggle(),
+            onLocaleToggle: () => context.read<LocaleCubit>().toggle(),
           ),
         ],
       ),
@@ -149,6 +154,7 @@ class _SidebarLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       height: AppConstants.topBarHeight,
@@ -181,7 +187,7 @@ class _SidebarLogo extends StatelessWidget {
             const SizedBox(width: AppConstants.space3),
             Expanded(
               child: Text(
-                'DoctorHub',
+                l10n.appName,
                 style: AppTypography.brand(
                   color: isDark
                       ? AppColors.darkTextPrimary
@@ -194,8 +200,12 @@ class _SidebarLogo extends StatelessWidget {
             onPressed: onToggle,
             icon: Icon(
               isCollapsed
-                  ? Icons.chevron_right_rounded
-                  : Icons.chevron_left_rounded,
+                  ? (Directionality.of(context) == TextDirection.rtl
+                        ? Icons.chevron_left_rounded
+                        : Icons.chevron_right_rounded)
+                  : (Directionality.of(context) == TextDirection.rtl
+                        ? Icons.chevron_right_rounded
+                        : Icons.chevron_left_rounded),
               size: 20,
               color: isDark
                   ? AppColors.darkTextSecondary
@@ -212,11 +222,13 @@ class _SidebarUserFooter extends StatelessWidget {
   final UserEntity user;
   final bool isCollapsed;
   final VoidCallback onThemeToggle;
+  final VoidCallback onLocaleToggle;
 
   const _SidebarUserFooter({
     required this.user,
     required this.isCollapsed,
     required this.onThemeToggle,
+    required this.onLocaleToggle,
   });
 
   @override
@@ -236,6 +248,11 @@ class _SidebarUserFooter extends StatelessWidget {
           ? Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                _LanguageToggleButton(
+                  onToggle: onLocaleToggle,
+                  isCollapsed: true,
+                ),
+                const SizedBox(height: 6),
                 _ThemeToggleButton(
                   isDark: isDark,
                   onToggle: onThemeToggle,
@@ -248,15 +265,104 @@ class _SidebarUserFooter extends StatelessWidget {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _ThemeToggleButton(
-                  isDark: isDark,
-                  onToggle: onThemeToggle,
-                  isCollapsed: false,
+                Row(
+                  children: [
+                    Expanded(
+                      child: _LanguageToggleButton(
+                        onToggle: onLocaleToggle,
+                        isCollapsed: false,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _ThemeToggleButton(
+                        isDark: isDark,
+                        onToggle: onThemeToggle,
+                        isCollapsed: false,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: AppConstants.space3),
                 DashboardUserProfileTile(user: user),
               ],
             ),
+    );
+  }
+}
+
+/// Animated language toggle button (EN / AR) for sidebar.
+class _LanguageToggleButton extends StatelessWidget {
+  final VoidCallback onToggle;
+  final bool isCollapsed;
+
+  const _LanguageToggleButton({
+    required this.onToggle,
+    required this.isCollapsed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().isArabic;
+    final l10n = AppLocalizations.of(context)!;
+
+    if (isCollapsed) {
+      return Tooltip(
+        message: l10n.commonSwitchLanguage,
+        child: GestureDetector(
+          onTap: onToggle,
+          child: Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+            ),
+            child: Center(
+              child: Text(
+                isArabic ? 'EN' : 'ع',
+                style: AppTypography.headingSm(color: AppColors.primary),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return GestureDetector(
+      onTap: onToggle,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.language_rounded,
+              size: 16,
+              color: AppColors.primary,
+            ),
+            const SizedBox(width: 4),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  isArabic ? 'English' : 'العربية',
+                  style: AppTypography.bodySm(
+                    color: AppColors.primary,
+                    weight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -275,9 +381,11 @@ class _ThemeToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (isCollapsed) {
       return Tooltip(
-        message: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+        message: isDark ? l10n.commonLightMode : l10n.commonDarkMode,
         child: GestureDetector(
           onTap: onToggle,
           child: AnimatedContainer(
@@ -306,12 +414,11 @@ class _ThemeToggleButton extends StatelessWidget {
       );
     }
 
-    // Expanded sidebar: full-width pill toggle
     return GestureDetector(
       onTap: onToggle,
       child: AnimatedContainer(
         duration: AppConstants.animFast,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         decoration: BoxDecoration(
           color: isDark
               ? AppColors.primary.withValues(alpha: 0.1)
@@ -324,6 +431,7 @@ class _ThemeToggleButton extends StatelessWidget {
           ),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedSwitcher(
               duration: AppConstants.animFast,
@@ -334,39 +442,17 @@ class _ThemeToggleButton extends StatelessWidget {
                 color: isDark ? AppColors.primary : AppColors.warning,
               ),
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                isDark ? 'Dark Mode' : 'Light Mode',
-                style: AppTypography.bodyMd(
-                  color: isDark
-                      ? AppColors.primary
-                      : AppColors.warning,
-                  weight: FontWeight.w500,
-                ),
-              ),
-            ),
-            // Toggle pill
-            AnimatedContainer(
-              duration: AppConstants.animFast,
-              width: 36,
-              height: 20,
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.primary : AppColors.neutral300,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: AnimatedAlign(
-                duration: AppConstants.animFast,
-                alignment:
-                    isDark ? Alignment.centerRight : Alignment.centerLeft,
-                child: Container(
-                  width: 16,
-                  height: 16,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
+            const SizedBox(width: 4),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  isDark ? l10n.commonDarkMode : l10n.commonLightMode,
+                  style: AppTypography.bodySm(
+                    color: isDark ? AppColors.primary : AppColors.warning,
+                    weight: FontWeight.w600,
                   ),
+                  maxLines: 1,
                 ),
               ),
             ),
@@ -421,10 +507,10 @@ class _SidebarNavItemState extends State<_SidebarNavItem> {
               color: widget.isSelected
                   ? AppColors.primary.withValues(alpha: 0.12)
                   : _isHovered
-                      ? (isDark
-                          ? Colors.white.withValues(alpha: 0.05)
-                          : Colors.black.withValues(alpha: 0.04))
-                      : Colors.transparent,
+                  ? (isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.black.withValues(alpha: 0.04))
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(AppConstants.radiusMd),
             ),
             child: Row(
@@ -435,8 +521,8 @@ class _SidebarNavItemState extends State<_SidebarNavItem> {
                   color: widget.isSelected
                       ? AppColors.primary
                       : (isDark
-                          ? AppColors.darkTextSecondary
-                          : AppColors.lightTextSecondary),
+                            ? AppColors.darkTextSecondary
+                            : AppColors.lightTextSecondary),
                 ),
                 if (!widget.isCollapsed) ...[
                   const SizedBox(width: AppConstants.space3),
@@ -446,8 +532,8 @@ class _SidebarNavItemState extends State<_SidebarNavItem> {
                       color: widget.isSelected
                           ? AppColors.primary
                           : (isDark
-                              ? AppColors.darkTextSecondary
-                              : AppColors.lightTextSecondary),
+                                ? AppColors.darkTextSecondary
+                                : AppColors.lightTextSecondary),
                       weight: widget.isSelected
                           ? FontWeight.w600
                           : FontWeight.w400,
@@ -494,6 +580,7 @@ class DashboardBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final location = GoRouterState.of(context).matchedLocation;
     final selectedIndex = _getSelectedIndex(location);
 
@@ -501,30 +588,29 @@ class DashboardBottomNavBar extends StatelessWidget {
       currentIndex: selectedIndex,
       onTap: (idx) => _onItemTapped(context, idx),
       type: BottomNavigationBarType.fixed,
-      backgroundColor:
-          isDark ? AppColors.darkSurface : AppColors.lightSurface,
+      backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
       selectedItemColor: AppColors.primary,
       unselectedItemColor: isDark
           ? AppColors.darkTextSecondary
           : AppColors.lightTextSecondary,
       selectedLabelStyle: AppTypography.labelSm(),
       unselectedLabelStyle: AppTypography.labelSm(),
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.grid_view_rounded),
-          label: 'Dashboard',
+          icon: const Icon(Icons.grid_view_rounded),
+          label: l10n.navDashboard,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.people_rounded),
-          label: 'Patients',
+          icon: const Icon(Icons.people_rounded),
+          label: l10n.navPatients,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month_rounded),
-          label: 'Appointments',
+          icon: const Icon(Icons.calendar_month_rounded),
+          label: l10n.navAppointments,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.analytics_rounded),
-          label: 'Reports',
+          icon: const Icon(Icons.analytics_rounded),
+          label: l10n.navReports,
         ),
       ],
     );

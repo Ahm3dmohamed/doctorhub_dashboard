@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../shared/widgets/app_modal_dialog.dart';
@@ -15,6 +16,7 @@ class DoctorDetailsModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final textColor = isDark
         ? AppColors.darkTextPrimary
         : AppColors.lightTextPrimary;
@@ -23,35 +25,35 @@ class DoctorDetailsModal extends StatelessWidget {
       title: doctor.name,
       subtitle: '${doctor.specialty} • ${doctor.clinicName}',
       cancelLabel: null,
-      confirmLabel: 'Close',
+      confirmLabel: l10n.commonClose,
       onConfirm: () => Navigator.of(context).pop(),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Contact Info',
+            l10n.commonDetails,
             style: AppTypography.headingSm(color: textColor),
           ),
           const SizedBox(height: 6),
           Text(
-            'Email: ${doctor.email}',
+            '${l10n.commonEmail}: ${doctor.email}',
             style: AppTypography.bodyMd(color: textColor),
           ),
           Text(
-            'Phone: ${doctor.phone}',
+            '${l10n.commonPhone}: ${doctor.phone}',
             style: AppTypography.bodyMd(color: textColor),
           ),
           Text(
-            'Experience: ${doctor.yearsOfExperience} years',
+            '${l10n.doctorsExperience}: ${doctor.yearsOfExperience}',
             style: AppTypography.bodyMd(color: textColor),
           ),
           Text(
-            'Patients Treated: ${doctor.totalPatients}',
+            '${l10n.navPatients}: ${doctor.totalPatients}',
             style: AppTypography.bodyMd(color: textColor),
           ),
           const SizedBox(height: 16),
           Text(
-            'Working Hours',
+            l10n.doctorsAvailability,
             style: AppTypography.headingSm(color: textColor),
           ),
           const SizedBox(height: 6),

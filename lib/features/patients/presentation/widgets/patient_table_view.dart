@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -26,27 +27,24 @@ class PatientTableView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppDataTable<PatientEntity>(
       isLoading: isLoading,
       items: patients,
-      searchHint: 'Search patients by name, email, phone...',
+      searchHint: l10n.patientsSearchHint,
       onSearchChanged: onSearchChanged,
       columns: [
         DataTableColumn<PatientEntity>(
-          title: 'Patient',
+          title: l10n.navPatients,
           builder: (p) => Row(
             children: [
               CircleAvatar(
                 radius: 18,
-                backgroundColor: AppColors.info.withValues(
-                  alpha: 0.15,
-                ),
+                backgroundColor: AppColors.info.withValues(alpha: 0.15),
                 child: Text(
                   p.initials,
-                  style: AppTypography.labelSm(
-                    color: AppColors.info,
-                  ),
+                  style: AppTypography.labelSm(color: AppColors.info),
                 ),
               ),
               const SizedBox(width: 12),
@@ -77,9 +75,9 @@ class PatientTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<PatientEntity>(
-          title: 'Age / Gender',
+          title: l10n.patientsAgeGender,
           builder: (p) => Text(
-            '${p.age} yrs • ${p.gender}',
+            '${p.age} • ${p.gender}',
             style: AppTypography.bodySm(
               color: isDark
                   ? AppColors.darkTextPrimary
@@ -88,17 +86,12 @@ class PatientTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<PatientEntity>(
-          title: 'Blood Group',
+          title: l10n.patientsBloodGroup,
           builder: (p) => Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 4,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: AppColors.error.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(
-                AppConstants.radiusFull,
-              ),
+              borderRadius: BorderRadius.circular(AppConstants.radiusFull),
             ),
             child: Text(
               p.bloodGroup,
@@ -107,7 +100,7 @@ class PatientTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<PatientEntity>(
-          title: 'Emergency Contact',
+          title: l10n.patientsEmergencyContact,
           builder: (p) => Text(
             '${p.emergencyContact.name} (${p.emergencyContact.relation})',
             style: AppTypography.labelSm(
@@ -118,21 +111,18 @@ class PatientTableView extends StatelessWidget {
           ),
         ),
         DataTableColumn<PatientEntity>(
-          title: 'Actions',
+          title: l10n.commonActions,
           builder: (p) => Row(
             children: [
               IconButton(
-                icon: const Icon(
-                  Icons.medical_information_outlined,
-                  size: 18,
-                ),
+                icon: const Icon(Icons.medical_information_outlined, size: 18),
                 onPressed: () => onViewSummary(p),
-                tooltip: 'Medical Summary',
+                tooltip: l10n.patientsMedicalSummary(p.name),
               ),
               IconButton(
                 icon: const Icon(Icons.edit_outlined, size: 18),
                 onPressed: () => onEdit(p),
-                tooltip: 'Edit Patient',
+                tooltip: l10n.patientsEdit,
               ),
               IconButton(
                 icon: const Icon(
@@ -141,7 +131,7 @@ class PatientTableView extends StatelessWidget {
                   color: AppColors.error,
                 ),
                 onPressed: () => onDelete(p),
-                tooltip: 'Delete Patient',
+                tooltip: l10n.commonDelete,
               ),
             ],
           ),

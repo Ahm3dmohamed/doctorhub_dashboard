@@ -17,6 +17,7 @@ class AppBreadcrumb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -33,7 +34,7 @@ class AppBreadcrumb extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Icon(
-                    Icons.chevron_right_rounded,
+                    isRtl ? Icons.chevron_left_rounded : Icons.chevron_right_rounded,
                     size: 16,
                     color: isDark
                         ? AppColors.darkTextMuted

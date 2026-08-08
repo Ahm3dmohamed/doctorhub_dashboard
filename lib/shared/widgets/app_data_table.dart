@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_typography.dart';
 import '../../core/constants/app_constants.dart';
@@ -56,6 +57,7 @@ class AppDataTable<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -68,7 +70,6 @@ class AppDataTable<T> extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ─── Header Controls (Search + Filters + Action) ─────────────────────
           if (onSearchChanged != null ||
               filterWidget != null ||
               headerAction != null)
@@ -95,7 +96,10 @@ class AppDataTable<T> extends StatelessWidget {
                                   : AppColors.lightTextPrimary,
                             ),
                             decoration: InputDecoration(
-                              hintText: searchHint ?? 'Search records...',
+                              hintText:
+                                  searchHint ??
+                                  l10n?.commonSearch ??
+                                  'Search records...',
                               prefixIcon: Icon(
                                 Icons.search_rounded,
                                 size: 16,
@@ -153,8 +157,11 @@ class AppDataTable<T> extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(40),
               child: EmptyWidget(
-                title: emptyTitle ?? 'No Records Found',
-                message: emptyMessage ?? 'There are no items to display.',
+                title: emptyTitle ?? l10n?.commonNoData ?? 'No Records Found',
+                message:
+                    emptyMessage ??
+                    l10n?.commonNoData ??
+                    'There are no items to display.',
                 icon: Icons.inbox_rounded,
               ),
             )
@@ -218,7 +225,7 @@ class AppDataTable<T> extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Showing ${((currentPage - 1) * itemsPerPage) + 1} to ${(currentPage * itemsPerPage).clamp(0, totalItems)} of $totalItems entries',
+                    '${((currentPage - 1) * itemsPerPage) + 1} - ${(currentPage * itemsPerPage).clamp(0, totalItems)} / $totalItems',
                     style: AppTypography.bodySm(
                       color: isDark
                           ? AppColors.darkTextSecondary
@@ -228,7 +235,7 @@ class AppDataTable<T> extends StatelessWidget {
                   Row(
                     children: [
                       SecondaryButton(
-                        label: 'Previous',
+                        label: l10n?.commonBack ?? 'Previous',
                         width: 90,
                         height: 34,
                         onPressed: currentPage > 1
@@ -256,7 +263,7 @@ class AppDataTable<T> extends StatelessWidget {
                       ),
                       const SizedBox(width: AppConstants.space2),
                       SecondaryButton(
-                        label: 'Next',
+                        label: l10n?.commonNext ?? 'Next',
                         width: 80,
                         height: 34,
                         onPressed: currentPage < totalPages

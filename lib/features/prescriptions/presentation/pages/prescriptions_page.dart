@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -47,6 +48,7 @@ class _PrescriptionsPageState extends State<PrescriptionsPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark
@@ -60,10 +62,10 @@ class _PrescriptionsPageState extends State<PrescriptionsPage> {
             AppBreadcrumb(
               items: [
                 BreadcrumbItem(
-                  label: 'Dashboard',
+                  label: l10n.navDashboard,
                   onTap: () => context.go(AppRoutes.dashboard),
                 ),
-                const BreadcrumbItem(label: 'Prescriptions'),
+                BreadcrumbItem(label: l10n.navPrescriptions),
               ],
             ),
             const SizedBox(height: AppConstants.space4),

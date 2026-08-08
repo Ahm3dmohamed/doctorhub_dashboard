@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -42,6 +43,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark
@@ -55,10 +57,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
             AppBreadcrumb(
               items: [
                 BreadcrumbItem(
-                  label: 'Dashboard',
+                  label: l10n.navDashboard,
                   onTap: () => context.go(AppRoutes.dashboard),
                 ),
-                const BreadcrumbItem(label: 'Notification Center'),
+                BreadcrumbItem(label: l10n.navNotifications),
               ],
             ),
             const SizedBox(height: AppConstants.space4),
@@ -71,9 +73,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             BlocBuilder<NotificationCubit, NotificationState>(
               builder: (context, state) {
                 if (state is NotificationLoading) {
-                  return const LoadingWidget(
-                    message: 'Loading Notifications...',
-                  );
+                  return LoadingWidget(message: l10n.commonLoading);
                 }
 
                 if (state is NotificationError) {
@@ -86,9 +86,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
                 if (state is NotificationLoaded) {
                   if (state.notifications.isEmpty) {
-                    return const EmptyWidget(
-                      title: 'No Notifications Found',
-                      message: 'There are no active system notifications.',
+                    return EmptyWidget(
+                      title: l10n.notifTitle,
+                      message: l10n.commonNoData,
                       icon: Icons.notifications_none_rounded,
                     );
                   }

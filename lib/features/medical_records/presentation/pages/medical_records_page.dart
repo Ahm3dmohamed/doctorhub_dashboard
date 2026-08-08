@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -66,6 +67,7 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark
@@ -79,10 +81,10 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
             AppBreadcrumb(
               items: [
                 BreadcrumbItem(
-                  label: 'Dashboard',
+                  label: l10n.navDashboard,
                   onTap: () => context.go(AppRoutes.dashboard),
                 ),
-                const BreadcrumbItem(label: 'Medical Records'),
+                BreadcrumbItem(label: l10n.navMedicalRecords),
               ],
             ),
             const SizedBox(height: AppConstants.space4),
@@ -119,7 +121,7 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
             BlocBuilder<MedicalRecordCubit, MedicalRecordState>(
               builder: (context, state) {
                 if (state is MedicalRecordLoading) {
-                  return const LoadingWidget(message: 'Loading EMR Records...');
+                  return LoadingWidget(message: l10n.commonLoading);
                 }
 
                 if (state is MedicalRecordError) {
@@ -132,9 +134,9 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
 
                 if (state is MedicalRecordLoaded) {
                   if (state.records.isEmpty) {
-                    return const EmptyWidget(
-                      title: 'No Medical Records Found',
-                      message: 'There are no EMR records matching your criteria.',
+                    return EmptyWidget(
+                      title: l10n.medTitle,
+                      message: l10n.commonNoData,
                       icon: Icons.folder_open_rounded,
                     );
                   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -31,6 +32,7 @@ class _ReportsPageState extends State<ReportsPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor:
@@ -43,10 +45,10 @@ class _ReportsPageState extends State<ReportsPage> {
             AppBreadcrumb(
               items: [
                 BreadcrumbItem(
-                  label: 'Dashboard',
+                  label: l10n.navDashboard,
                   onTap: () => context.go(AppRoutes.dashboard),
                 ),
-                const BreadcrumbItem(label: 'Reports & Analytics'),
+                BreadcrumbItem(label: l10n.navReports),
               ],
             ),
             const SizedBox(height: AppConstants.space4),
@@ -55,8 +57,8 @@ class _ReportsPageState extends State<ReportsPage> {
             BlocBuilder<ReportCubit, ReportState>(
               builder: (context, state) {
                 if (state is ReportLoading) {
-                  return const LoadingWidget(
-                    message: 'Generating Executive Analytics...',
+                  return LoadingWidget(
+                    message: l10n.commonLoading,
                   );
                 }
                 if (state is ReportError) {
@@ -82,7 +84,7 @@ class _ReportsPageState extends State<ReportsPage> {
                       ),
                       const SizedBox(height: AppConstants.space6),
                       AppChartCard(
-                        title: 'Revenue Overview',
+                        title: l10n.reportsRevenueOverview,
                         totalValue:
                             '\$${summary.monthlyRevenue.toStringAsFixed(0)}',
                         changePercentage: summary.revenueGrowth,

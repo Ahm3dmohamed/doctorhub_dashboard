@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../../app/theme/app_colors.dart';
 import '../../../../../app/theme/app_typography.dart';
 import '../pages/widgets/state_card.dart';
@@ -10,12 +11,13 @@ class ReviewHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Ratings & Reviews Management',
+          l10n.reviewsTitle,
           style: AppTypography.headingXl(
             color: isDark
                 ? AppColors.darkTextPrimary
@@ -24,7 +26,7 @@ class ReviewHeader extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Monitor patient ratings, reply to clinic and doctor feedback, and manage customer sentiment',
+          l10n.reviewsSubtitle,
           style: AppTypography.bodyMd(
             color: isDark
                 ? AppColors.darkTextSecondary
@@ -36,7 +38,7 @@ class ReviewHeader extends StatelessWidget {
           children: [
             Expanded(
               child: StateCard(
-                label: 'Average Rating',
+                label: l10n.reviewsAvgRating,
                 value: '4.85 / 5.0',
                 icon: Icons.star_rounded,
                 color: AppColors.warning,
@@ -46,7 +48,7 @@ class ReviewHeader extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: StateCard(
-                label: 'Total Reviews',
+                label: l10n.reviewsTotal,
                 value: '1,248',
                 icon: Icons.rate_review_rounded,
                 color: AppColors.primary,
@@ -56,7 +58,7 @@ class ReviewHeader extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: StateCard(
-                label: 'Response Rate',
+                label: l10n.reviewsResponseRate,
                 value: '94.2%',
                 icon: Icons.reply_all_rounded,
                 color: AppColors.success,

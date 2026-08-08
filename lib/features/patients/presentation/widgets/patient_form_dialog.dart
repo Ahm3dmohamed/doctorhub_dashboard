@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/widgets/app_modal_dialog.dart';
 import '../../../../shared/widgets/app_text_field.dart';
@@ -8,11 +9,7 @@ class PatientFormDialog extends StatefulWidget {
   final PatientEntity? patient;
   final Function(PatientEntity) onSave;
 
-  const PatientFormDialog({
-    super.key,
-    this.patient,
-    required this.onSave,
-  });
+  const PatientFormDialog({super.key, this.patient, required this.onSave});
 
   @override
   State<PatientFormDialog> createState() => _PatientFormDialogState();
@@ -57,16 +54,13 @@ class _PatientFormDialogState extends State<PatientFormDialog> {
     final newPatient = PatientEntity(
       id: p?.id ?? '',
       name: _nameCtrl.text.isEmpty ? 'Jane Doe' : _nameCtrl.text,
-      email: _emailCtrl.text.isEmpty
-          ? 'patient@example.com'
-          : _emailCtrl.text,
-      phone: _phoneCtrl.text.isEmpty
-          ? '+1 (555) 000-0000'
-          : _phoneCtrl.text,
+      email: _emailCtrl.text.isEmpty ? 'patient@example.com' : _emailCtrl.text,
+      phone: _phoneCtrl.text.isEmpty ? '+1 (555) 000-0000' : _phoneCtrl.text,
       age: int.tryParse(_ageCtrl.text) ?? 30,
       gender: p?.gender ?? 'Female',
       bloodGroup: _bloodCtrl.text,
-      emergencyContact: p?.emergencyContact ??
+      emergencyContact:
+          p?.emergencyContact ??
           const EmergencyContact(
             name: 'Contact Person',
             relation: 'Family',
@@ -86,28 +80,29 @@ class _PatientFormDialogState extends State<PatientFormDialog> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.patient != null;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppModalDialog(
-      title: isEditing ? 'Edit Patient' : 'Add New Patient',
-      subtitle: 'Enter patient bio and emergency contact details.',
+      title: isEditing ? l10n.patientsEdit : l10n.patientsAdd,
+      subtitle: l10n.patientsSubtitle,
       onConfirm: _submit,
       content: Column(
         children: [
           AppTextField(
             controller: _nameCtrl,
-            label: 'Full Name',
+            label: l10n.commonName,
             hint: 'Jane Doe',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _emailCtrl,
-            label: 'Email Address',
+            label: l10n.commonEmail,
             hint: 'patient@example.com',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _phoneCtrl,
-            label: 'Phone Number',
+            label: l10n.commonPhone,
             hint: '+1 (555) 000-0000',
           ),
           const SizedBox(height: AppConstants.space3),
@@ -116,7 +111,7 @@ class _PatientFormDialogState extends State<PatientFormDialog> {
               Expanded(
                 child: AppTextField(
                   controller: _ageCtrl,
-                  label: 'Age',
+                  label: l10n.patientsAge,
                   hint: '30',
                 ),
               ),
@@ -124,7 +119,7 @@ class _PatientFormDialogState extends State<PatientFormDialog> {
               Expanded(
                 child: AppTextField(
                   controller: _bloodCtrl,
-                  label: 'Blood Group',
+                  label: l10n.patientsBloodGroup,
                   hint: 'O+',
                 ),
               ),
@@ -133,15 +128,15 @@ class _PatientFormDialogState extends State<PatientFormDialog> {
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _historyCtrl,
-            label: 'Medical History',
-            hint: 'Prior conditions...',
+            label: l10n.patientsMedicalHistory,
+            hint: '...',
             maxLines: 2,
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _allergiesCtrl,
-            label: 'Known Allergies',
-            hint: 'Penicillin...',
+            label: l10n.patientsKnownAllergies,
+            hint: '...',
           ),
         ],
       ),

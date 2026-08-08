@@ -2,8 +2,10 @@ import 'package:doctorhub_dashboard/app/theme/app_colors.dart';
 import 'package:doctorhub_dashboard/app/theme/app_typography.dart';
 import 'package:doctorhub_dashboard/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 
-Widget buildFooter() {
+Widget buildFooter(BuildContext context) {
+  final l10n = AppLocalizations.of(context)!;
   return Column(
     children: [
       Row(
@@ -14,7 +16,7 @@ Widget buildFooter() {
               horizontal: AppConstants.space3,
             ),
             child: Text(
-              'Secure login',
+              l10n.authSecureLogin,
               style: AppTypography.labelSm(color: AppColors.darkTextMuted),
             ),
           ),
@@ -28,7 +30,7 @@ Widget buildFooter() {
           Icon(Icons.lock_rounded, size: 12, color: AppColors.darkTextMuted),
           const SizedBox(width: 6),
           Text(
-            'Protected by DoctorHub Security',
+            l10n.authProtectedByDoctorhub,
             style: AppTypography.labelSm(color: AppColors.darkTextMuted),
           ),
         ],

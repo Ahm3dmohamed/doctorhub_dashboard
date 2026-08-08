@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -52,10 +53,11 @@ class _PatientsPageState extends State<PatientsPage> {
   }
 
   void _confirmDeletePatient(PatientEntity p) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await AppModalDialog.showConfirmation(
       context: context,
-      title: 'Delete Patient Record',
-      message: 'Are you sure you want to remove ${p.name}?',
+      title: l10n.patientsDeleteConfirmTitle,
+      message: l10n.patientsDeleteConfirmMessage(p.name),
     );
     if (confirmed == true && mounted) {
       context.read<PatientCubit>().deletePatient(p.id);
@@ -65,6 +67,7 @@ class _PatientsPageState extends State<PatientsPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark
@@ -78,16 +81,14 @@ class _PatientsPageState extends State<PatientsPage> {
             AppBreadcrumb(
               items: [
                 BreadcrumbItem(
-                  label: 'Dashboard',
+                  label: l10n.navDashboard,
                   onTap: () => context.go(AppRoutes.dashboard),
                 ),
-                const BreadcrumbItem(label: 'Patients'),
+                BreadcrumbItem(label: l10n.navPatients),
               ],
             ),
             const SizedBox(height: AppConstants.space4),
-            PatientHeader(
-              onAddPatient: () => _showPatientFormModal(),
-            ),
+            PatientHeader(onAddPatient: () => _showPatientFormModal()),
             const SizedBox(height: AppConstants.space6),
             BlocBuilder<PatientCubit, PatientState>(
               builder: (context, state) {

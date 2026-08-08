@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
@@ -20,6 +21,7 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     Color typeColor;
     IconData typeIcon;
@@ -86,9 +88,7 @@ class NotificationCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         notification.title,
-                        style: AppTypography.headingSm(
-                          color: primaryTextColor,
-                        ),
+                        style: AppTypography.headingSm(color: primaryTextColor),
                       ),
                     ),
                     Container(
@@ -98,12 +98,10 @@ class NotificationCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: typeColor.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(
-                          AppConstants.radiusSm,
-                        ),
+                        borderRadius: BorderRadius.circular(AppConstants.radiusSm),
                       ),
                       child: Text(
-                        'Target: ${notification.targetAudience.displayName}',
+                        '${l10n.notifTarget}: ${notification.targetAudience.displayName}',
                         style: AppTypography.labelSm(color: typeColor),
                       ),
                     ),
@@ -118,9 +116,8 @@ class NotificationCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      DateFormat(
-                        'MMM dd, yyyy • hh:mm a',
-                      ).format(notification.createdAt),
+                      DateFormat('MMM dd, yyyy • hh:mm a')
+                          .format(notification.createdAt),
                       style: AppTypography.bodySm(color: secondaryTextColor),
                     ),
                     const Spacer(),
@@ -128,7 +125,7 @@ class NotificationCard extends StatelessWidget {
                       TextButton(
                         onPressed: onMarkAsRead,
                         child: Text(
-                          'Mark as Read',
+                          l10n.commonViewAll,
                           style: AppTypography.bodySm(color: AppColors.primary),
                         ),
                       ),
@@ -139,7 +136,7 @@ class NotificationCard extends StatelessWidget {
                         size: 18,
                       ),
                       onPressed: onDelete,
-                      tooltip: 'Delete Notification',
+                      tooltip: l10n.commonDelete,
                     ),
                   ],
                 ),

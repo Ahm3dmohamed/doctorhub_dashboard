@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../shared/widgets/app_modal_dialog.dart';
 import '../../../../shared/widgets/app_text_field.dart';
@@ -91,8 +92,10 @@ class _CreatePrescriptionDialogState extends State<CreatePrescriptionDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AppModalDialog(
-      title: 'Create New Prescription',
+      title: l10n.rxCreate,
       content: SizedBox(
         width: 600,
         child: SingleChildScrollView(
@@ -102,13 +105,13 @@ class _CreatePrescriptionDialogState extends State<CreatePrescriptionDialog> {
             children: [
               AppTextField(
                 controller: _patientNameCtrl,
-                label: 'Patient Name',
+                label: l10n.apptsPatient,
                 hint: 'e.g. Sarah Jenkins',
               ),
               const SizedBox(height: 12),
               AppTextField(
                 controller: _doctorNameCtrl,
-                label: 'Doctor Name',
+                label: l10n.apptsDoctor,
                 hint: 'e.g. Dr. Alexander Wright',
               ),
               const SizedBox(height: 16),
@@ -116,12 +119,12 @@ class _CreatePrescriptionDialogState extends State<CreatePrescriptionDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Medicines List',
+                    l10n.rxMedicineName,
                     style: AppTypography.headingSm(),
                   ),
                   TextButton.icon(
                     icon: const Icon(Icons.add, size: 18),
-                    label: const Text('Add Medicine'),
+                    label: Text(l10n.rxAddMedicine),
                     onPressed: _addMedicine,
                   ),
                 ],
@@ -138,12 +141,12 @@ class _CreatePrescriptionDialogState extends State<CreatePrescriptionDialog> {
               }),
               AppTextField(
                 controller: _notesCtrl,
-                label: 'Prescription Notes',
-                hint: 'Special advice/precautions',
+                label: l10n.rxInstructions,
+                hint: '...',
               ),
               const SizedBox(height: 20),
               PrimaryButton(
-                label: 'Save Prescription',
+                label: l10n.commonSave,
                 onPressed: _submit,
               ),
             ],

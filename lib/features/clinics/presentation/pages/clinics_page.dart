@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -52,10 +53,11 @@ class _ClinicsPageState extends State<ClinicsPage> {
   }
 
   void _confirmDeleteClinic(ClinicEntity clinic) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await AppModalDialog.showConfirmation(
       context: context,
-      title: 'Delete Clinic',
-      message: 'Are you sure you want to delete ${clinic.name}?',
+      title: l10n.clinicsDeleteConfirmTitle,
+      message: l10n.clinicsDeleteConfirmMessage(clinic.name),
     );
     if (confirmed == true && mounted) {
       context.read<ClinicCubit>().deleteClinic(clinic.id);
@@ -65,6 +67,7 @@ class _ClinicsPageState extends State<ClinicsPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark
@@ -78,10 +81,10 @@ class _ClinicsPageState extends State<ClinicsPage> {
             AppBreadcrumb(
               items: [
                 BreadcrumbItem(
-                  label: 'Dashboard',
+                  label: l10n.navDashboard,
                   onTap: () => context.go(AppRoutes.dashboard),
                 ),
-                const BreadcrumbItem(label: 'Clinics'),
+                BreadcrumbItem(label: l10n.navClinics),
               ],
             ),
             const SizedBox(height: AppConstants.space4),

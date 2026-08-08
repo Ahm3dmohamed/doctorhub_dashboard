@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/widgets/app_modal_dialog.dart';
 import '../../../../shared/widgets/app_text_field.dart';
@@ -88,34 +89,35 @@ class _ClinicFormDialogState extends State<ClinicFormDialog> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.clinic != null;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppModalDialog(
-      title: isEditing ? 'Edit Clinic' : 'Add New Clinic',
-      subtitle: 'Fill in clinic address and location coordinates.',
+      title: isEditing ? l10n.clinicsEdit : l10n.clinicsAdd,
+      subtitle: l10n.clinicsSubtitle,
       onConfirm: _submit,
       content: Column(
         children: [
           AppTextField(
             controller: _nameCtrl,
-            label: 'Clinic Name',
+            label: l10n.clinicsName,
             hint: 'Central Clinic',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _emailCtrl,
-            label: 'Email',
+            label: l10n.commonEmail,
             hint: 'contact@clinic.com',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _phoneCtrl,
-            label: 'Phone',
+            label: l10n.commonPhone,
             hint: '+1 (555) 000-0000',
           ),
           const SizedBox(height: AppConstants.space3),
           AppTextField(
             controller: _addressCtrl,
-            label: 'Street Address',
+            label: l10n.clinicsAddress,
             hint: '100 Medical Blvd',
           ),
           const SizedBox(height: AppConstants.space3),

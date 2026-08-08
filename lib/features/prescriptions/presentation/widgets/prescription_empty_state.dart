@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:doctorhub_dashboard/l10n/app_localizations.dart';
 import '../../../../shared/widgets/empty_widget.dart';
 
 class PrescriptionEmptyState extends StatelessWidget {
@@ -6,9 +7,11 @@ class PrescriptionEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const EmptyWidget(
-      title: 'No Prescriptions Found',
-      message: 'There are no prescriptions matching your criteria.',
+    final l10n = AppLocalizations.of(context)!;
+
+    return EmptyWidget(
+      title: l10n.rxNoFound,
+      message: l10n.commonNoData,
       icon: Icons.description_outlined,
     );
   }
