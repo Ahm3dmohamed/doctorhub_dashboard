@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/cubit/theme_cubit.dart';
 import '../../../../app/router/app_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
@@ -125,7 +127,11 @@ class DashboardSidebar extends StatelessWidget {
               },
             ),
           ),
-          _SidebarUserFooter(user: user, isCollapsed: isCollapsed),
+          _SidebarUserFooter(
+            user: user,
+            isCollapsed: isCollapsed,
+            onThemeToggle: () => context.read<ThemeCubit>().toggle(),
+          ),
         ],
       ),
     );
@@ -205,10 +211,12 @@ class _SidebarLogo extends StatelessWidget {
 class _SidebarUserFooter extends StatelessWidget {
   final UserEntity user;
   final bool isCollapsed;
+  final VoidCallback onThemeToggle;
 
   const _SidebarUserFooter({
     required this.user,
     required this.isCollapsed,
+    required this.onThemeToggle,
   });
 
   @override
@@ -225,8 +233,146 @@ class _SidebarUserFooter extends StatelessWidget {
         ),
       ),
       child: isCollapsed
-          ? DashboardUserAvatar(user: user, size: 36)
-          : DashboardUserProfileTile(user: user),
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _ThemeToggleButton(
+                  isDark: isDark,
+                  onToggle: onThemeToggle,
+                  isCollapsed: true,
+                ),
+                const SizedBox(height: 8),
+                DashboardUserAvatar(user: user, size: 36),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _ThemeToggleButton(
+                  isDark: isDark,
+                  onToggle: onThemeToggle,
+                  isCollapsed: false,
+                ),
+                const SizedBox(height: AppConstants.space3),
+                DashboardUserProfileTile(user: user),
+              ],
+            ),
+    );
+  }
+}
+
+/// Animated light/dark mode toggle button for the sidebar.
+class _ThemeToggleButton extends StatelessWidget {
+  final bool isDark;
+  final VoidCallback onToggle;
+  final bool isCollapsed;
+
+  const _ThemeToggleButton({
+    required this.isDark,
+    required this.onToggle,
+    required this.isCollapsed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (isCollapsed) {
+      return Tooltip(
+        message: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+        child: GestureDetector(
+          onTap: onToggle,
+          child: AnimatedContainer(
+            duration: AppConstants.animFast,
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: isDark
+                  ? AppColors.primary.withValues(alpha: 0.15)
+                  : AppColors.warning.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+            ),
+            child: Center(
+              child: AnimatedSwitcher(
+                duration: AppConstants.animFast,
+                child: Icon(
+                  isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                  key: ValueKey(isDark),
+                  size: 18,
+                  color: isDark ? AppColors.primary : AppColors.warning,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Expanded sidebar: full-width pill toggle
+    return GestureDetector(
+      onTap: onToggle,
+      child: AnimatedContainer(
+        duration: AppConstants.animFast,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isDark
+              ? AppColors.primary.withValues(alpha: 0.1)
+              : AppColors.warning.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+          border: Border.all(
+            color: isDark
+                ? AppColors.primary.withValues(alpha: 0.25)
+                : AppColors.warning.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          children: [
+            AnimatedSwitcher(
+              duration: AppConstants.animFast,
+              child: Icon(
+                isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                key: ValueKey(isDark),
+                size: 16,
+                color: isDark ? AppColors.primary : AppColors.warning,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                isDark ? 'Dark Mode' : 'Light Mode',
+                style: AppTypography.bodyMd(
+                  color: isDark
+                      ? AppColors.primary
+                      : AppColors.warning,
+                  weight: FontWeight.w500,
+                ),
+              ),
+            ),
+            // Toggle pill
+            AnimatedContainer(
+              duration: AppConstants.animFast,
+              width: 36,
+              height: 20,
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.primary : AppColors.neutral300,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: AnimatedAlign(
+                duration: AppConstants.animFast,
+                alignment:
+                    isDark ? Alignment.centerRight : Alignment.centerLeft,
+                child: Container(
+                  width: 16,
+                  height: 16,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

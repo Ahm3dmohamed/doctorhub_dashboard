@@ -16,11 +16,7 @@ class DashboardTopBar extends StatelessWidget {
   final UserEntity user;
   final VoidCallback? onToggleSidebar;
 
-  const DashboardTopBar({
-    super.key,
-    required this.user,
-    this.onToggleSidebar,
-  });
+  const DashboardTopBar({super.key, required this.user, this.onToggleSidebar});
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +74,19 @@ class DashboardTopBar extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
-                      color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                      color: isDark
+                          ? AppColors.darkSurface
+                          : AppColors.lightSurface,
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(
-                        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : AppColors.lightBorder,
                       ),
                     ),
                     child: Text(
@@ -113,10 +116,7 @@ class DashboardTopBar extends StatelessWidget {
   }
 
   void _showGlobalSearchModal(BuildContext context) {
-    showSearch(
-      context: context,
-      delegate: _GlobalSearchDelegate(),
-    );
+    showSearch(context: context, delegate: _GlobalSearchDelegate());
   }
 }
 
@@ -153,19 +153,69 @@ class _GlobalSearchDelegate extends SearchDelegate<String?> {
   Widget _buildSearchResults(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final options = [
-      {'title': 'Patients Directory', 'subtitle': 'View & search all patient EMR files', 'route': AppRoutes.patients, 'icon': Icons.people_rounded},
-      {'title': 'Appointments & Schedule', 'subtitle': 'Manage patient consultations', 'route': AppRoutes.appointments, 'icon': Icons.calendar_month_rounded},
-      {'title': 'Medical Records', 'subtitle': 'Diagnoses, lab results and EHR history', 'route': AppRoutes.medicalRecords, 'icon': Icons.medical_information_rounded},
-      {'title': 'Prescriptions Management', 'subtitle': 'Issue and track e-prescriptions', 'route': AppRoutes.prescriptions, 'icon': Icons.medication_rounded},
-      {'title': 'Clinics Directory', 'subtitle': 'Manage clinic locations & working hours', 'route': AppRoutes.clinics, 'icon': Icons.local_hospital_rounded},
-      {'title': 'Doctors Directory', 'subtitle': 'Manage medical staff and specialties', 'route': AppRoutes.doctors, 'icon': Icons.medical_services_rounded},
-      {'title': 'Reports & Analytics', 'subtitle': 'Executive revenue and KPI reports', 'route': AppRoutes.reports, 'icon': Icons.analytics_rounded},
-      {'title': 'Notifications Center', 'subtitle': 'View broadcast notices and alerts', 'route': AppRoutes.notifications, 'icon': Icons.notifications_rounded},
+      {
+        'title': 'Patients Directory',
+        'subtitle': 'View & search all patient EMR files',
+        'route': AppRoutes.patients,
+        'icon': Icons.people_rounded,
+      },
+      {
+        'title': 'Appointments & Schedule',
+        'subtitle': 'Manage patient consultations',
+        'route': AppRoutes.appointments,
+        'icon': Icons.calendar_month_rounded,
+      },
+      {
+        'title': 'Medical Records',
+        'subtitle': 'Diagnoses, lab results and EHR history',
+        'route': AppRoutes.medicalRecords,
+        'icon': Icons.medical_information_rounded,
+      },
+      {
+        'title': 'Prescriptions Management',
+        'subtitle': 'Issue and track e-prescriptions',
+        'route': AppRoutes.prescriptions,
+        'icon': Icons.medication_rounded,
+      },
+      {
+        'title': 'Clinics Directory',
+        'subtitle': 'Manage clinic locations & working hours',
+        'route': AppRoutes.clinics,
+        'icon': Icons.local_hospital_rounded,
+      },
+      {
+        'title': 'Doctors Directory',
+        'subtitle': 'Manage medical staff and specialties',
+        'route': AppRoutes.doctors,
+        'icon': Icons.medical_services_rounded,
+      },
+      {
+        'title': 'Reports & Analytics',
+        'subtitle': 'Executive revenue and KPI reports',
+        'route': AppRoutes.reports,
+        'icon': Icons.analytics_rounded,
+      },
+      {
+        'title': 'Notifications Center',
+        'subtitle': 'View broadcast notices and alerts',
+        'route': AppRoutes.notifications,
+        'icon': Icons.notifications_rounded,
+      },
     ];
 
     final filtered = query.isEmpty
         ? options
-        : options.where((o) => (o['title'] as String).toLowerCase().contains(query.toLowerCase()) || (o['subtitle'] as String).toLowerCase().contains(query.toLowerCase())).toList();
+        : options
+              .where(
+                (o) =>
+                    (o['title'] as String).toLowerCase().contains(
+                      query.toLowerCase(),
+                    ) ||
+                    (o['subtitle'] as String).toLowerCase().contains(
+                      query.toLowerCase(),
+                    ),
+              )
+              .toList();
 
     return Container(
       color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
@@ -175,8 +225,14 @@ class _GlobalSearchDelegate extends SearchDelegate<String?> {
           final item = filtered[i];
           return ListTile(
             leading: Icon(item['icon'] as IconData, color: AppColors.primary),
-            title: Text(item['title'] as String, style: AppTypography.headingSm()),
-            subtitle: Text(item['subtitle'] as String, style: AppTypography.bodySm()),
+            title: Text(
+              item['title'] as String,
+              style: AppTypography.headingSm(),
+            ),
+            subtitle: Text(
+              item['subtitle'] as String,
+              style: AppTypography.bodySm(),
+            ),
             onTap: () {
               close(context, null);
               context.go(item['route'] as String);
@@ -304,8 +360,8 @@ class DashboardUserProfileTile extends StatelessWidget {
                   user.role.displayName,
                   style: AppTypography.labelSm(
                     color: isDark
-                        ? AppColors.darkTextSecondary
-                        : AppColors.lightTextSecondary,
+                        ? const Color.fromARGB(255, 175, 175, 177)
+                        : const Color.fromARGB(255, 221, 222, 224),
                   ),
                 ),
               ],
@@ -318,9 +374,16 @@ class DashboardUserProfileTile extends StatelessWidget {
           onTap: () => context.read<AuthCubit>().logout(),
           child: Row(
             children: [
-              const Icon(Icons.logout_rounded, size: 16, color: AppColors.error),
+              const Icon(
+                Icons.logout_rounded,
+                size: 16,
+                color: AppColors.error,
+              ),
               const SizedBox(width: 10),
-              Text('Sign Out', style: AppTypography.bodyMd(color: AppColors.error)),
+              Text(
+                'Sign Out',
+                style: AppTypography.bodyMd(color: AppColors.error),
+              ),
             ],
           ),
         ),
@@ -336,10 +399,10 @@ class DashboardRoleBadge extends StatelessWidget {
   const DashboardRoleBadge({super.key, required this.role});
 
   Color get _color => switch (role) {
-        UserRole.superAdmin => AppColors.superAdminColor,
-        UserRole.doctor => AppColors.doctorColor,
-        UserRole.clinicManager => AppColors.clinicManagerColor,
-      };
+    UserRole.superAdmin => AppColors.superAdminColor,
+    UserRole.doctor => AppColors.doctorColor,
+    UserRole.clinicManager => AppColors.clinicManagerColor,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -428,9 +491,5 @@ class DashboardNavItem {
   final String label;
   final String? route;
 
-  const DashboardNavItem({
-    required this.icon,
-    required this.label,
-    this.route,
-  });
+  const DashboardNavItem({required this.icon, required this.label, this.route});
 }

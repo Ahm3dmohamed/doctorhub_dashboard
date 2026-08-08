@@ -39,10 +39,10 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     context.read<AuthCubit>().login(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-          rememberMe: _rememberMe,
-        );
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+      rememberMe: _rememberMe,
+    );
   }
 
   void _quickFill(String email, String password) {

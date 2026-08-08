@@ -35,8 +35,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
       vsync: this,
       duration: AppConstants.animSlow,
     )..forward();
-    _fadeAnimation =
-        CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -51,8 +53,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     context.read<AuthCubit>().forgotPassword(
-          email: _emailController.text.trim(),
-        );
+      email: _emailController.text.trim(),
+    );
   }
 
   @override
@@ -62,10 +64,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
         if (state is AuthError) {
           setState(() => _errorMessage = state.message);
         } else if (state is AuthForgotPasswordSent) {
-          context.go(
-            AppRoutes.resetPassword,
-            extra: {'email': state.email},
-          );
+          context.go(AppRoutes.resetPassword, extra: {'email': state.email});
         }
       },
       child: Scaffold(
@@ -138,7 +137,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                       Text(
                         'Back to login',
                         style: AppTypography.bodySm(
-                            color: AppColors.darkTextSecondary),
+                          color: AppColors.darkTextSecondary,
+                        ),
                       ),
                     ],
                   ),
@@ -152,8 +152,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                   height: 52,
                   decoration: BoxDecoration(
                     gradient: AppColors.primaryGradient,
-                    borderRadius:
-                        BorderRadius.circular(AppConstants.radiusXl),
+                    borderRadius: BorderRadius.circular(AppConstants.radiusXl),
                   ),
                   child: const Icon(
                     Icons.mail_outline_rounded,
@@ -174,7 +173,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                 Text(
                   'No worries! Enter your email address and we\'ll send you a reset link.',
                   style: AppTypography.bodyMd(
-                      color: AppColors.darkTextSecondary),
+                    color: AppColors.darkTextSecondary,
+                  ),
                 ),
 
                 const SizedBox(height: AppConstants.space6),
@@ -214,7 +214,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
                   child: Text(
                     'Remember your password? ',
                     style: AppTypography.bodySm(
-                        color: AppColors.darkTextSecondary),
+                      color: AppColors.darkTextSecondary,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 2),
