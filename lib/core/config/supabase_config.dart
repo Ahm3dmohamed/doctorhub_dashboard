@@ -11,17 +11,17 @@ abstract class SupabaseConfig {
   /// `--dart-define=SUPABASE_URL=https://xyzcompany.supabase.co`
   static const String supabaseUrl = String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: '',
+    defaultValue: 'https://txgnetvpapytckcagxgw.supabase.co',
   );
 
   /// Supabase Publishable / Anon Key provided via compile-time environment variable:
-  /// `--dart-define=SUPABASE_ANON_KEY=eyJhbGciOi...`
+  /// `--dart-define=SUPABASE_ANON_KEY=sb_publishable_...`
   ///
   /// IMPORTANT: Only publishable anon keys should be passed to client applications.
   /// Never expose the service_role key to Flutter Mobile or Web.
   static const String supabaseAnonKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: '',
+    defaultValue: 'sb_publishable_QV2_PAqU24FAIjwZUqtB3Q_KoyUkDnt',
   );
 
   // ─── Storage Bucket Names ──────────────────────────────────────────────────
@@ -48,17 +48,27 @@ abstract class SupabaseConfig {
 
   /// Flag indicating whether the Supabase client was successfully initialized.
   static bool _isInitialized = false;
-  static bool get isInitialized => _isInitialized;
+  static bool get isInitialized {
+    if (_isInitialized) return true;
+    try {
+      Supabase.instance.client;
+      _isInitialized = true;
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 
   /// Get the active SupabaseClient instance.
   /// Throws [StateError] if Supabase has not been initialized.
   static SupabaseClient get client {
-    if (!_isInitialized) {
+    try {
+      return Supabase.instance.client;
+    } catch (_) {
       throw StateError(
         'Supabase has not been initialized. Check SupabaseConfig.isConfigured first.',
       );
     }
-    return Supabase.instance.client;
   }
 
   /// Initialize Supabase Flutter SDK.

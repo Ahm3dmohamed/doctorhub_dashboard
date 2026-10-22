@@ -14,7 +14,6 @@ import '../../cubit/auth_cubit.dart';
 import '../../cubit/auth_state.dart';
 import 'build_footer.dart';
 import 'build_header.dart';
-import 'quik_fill_chip.dart';
 import 'remember_me_chckbox.dart';
 
 class FormBuildWidget extends StatefulWidget {
@@ -46,15 +45,6 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
     );
   }
 
-  void _quickFill(String email, String password) {
-    setState(() {
-      _emailController.text = email;
-      _passwordController.text = password;
-      _errorMessage = null;
-    });
-    _formKey.currentState?.reset();
-  }
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -69,7 +59,14 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
     final l10n = AppLocalizations.of(context)!;
     final isRtl = Directionality.of(context) == TextDirection.rtl;
 
-    return BlocBuilder<AuthCubit, AuthState>(
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthError) {
+          setState(() => _errorMessage = state.message);
+        } else if (state is AuthAuthenticated) {
+          context.go(AppRoutes.dashboard);
+        }
+      },
       builder: (context, state) {
         final isLoading = state is AuthLoading;
 
@@ -80,14 +77,16 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
             children: [
               buildHeader(context),
               const SizedBox(height: AppConstants.space8),
-              buildQuickFillChips(l10n),
 
               const SizedBox(height: AppConstants.space6),
 
               if (_errorMessage != null) ...[
                 ErrorBanner(
                   message: _errorMessage!,
-                  onDismiss: () => setState(() => _errorMessage = null),
+                  onDismiss: () {
+                    setState(() => _errorMessage = null);
+                    context.read<AuthCubit>().clearError();
+                  },
                 ),
                 const SizedBox(height: AppConstants.space4),
               ],
@@ -171,50 +170,6 @@ class _FormBuildWidgetState extends State<FormBuildWidget> {
           ),
         );
       },
-    );
-  }
-
-  Widget buildQuickFillChips(AppLocalizations l10n) {
-    final quickFills = [
-      (
-        l10n.authSuperAdmin,
-        'admin@doctorhub.com',
-        'Admin123',
-        AppColors.superAdminColor,
-      ),
-      (
-        l10n.authDoctor,
-        'doctor@doctorhub.com',
-        'Doctor123',
-        AppColors.doctorColor,
-      ),
-      (
-        l10n.authClinicManager,
-        'manager@doctorhub.com',
-        'Manager123',
-        AppColors.clinicManagerColor,
-      ),
-    ];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.authSelectRole,
-          style: AppTypography.labelMd(color: AppColors.darkTextSecondary),
-        ),
-        const SizedBox(height: AppConstants.space2),
-        Wrap(
-          spacing: AppConstants.space2,
-          runSpacing: AppConstants.space2,
-          children: quickFills.map((fill) {
-            return QuickFillChip(
-              label: fill.$1,
-              color: fill.$4,
-              onTap: () => _quickFill(fill.$2, fill.$3),
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 }

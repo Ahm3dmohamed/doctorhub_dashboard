@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app/app.dart';
 import 'app/di/injection.dart';
-import 'core/config/supabase_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +15,10 @@ void main() async {
     ),
   );
 
-  // Initialize Supabase Flutter SDK
-  await SupabaseConfig.initialize();
+  await Supabase.initialize(
+    url: 'https://txgnetvpapytckcagxgw.supabase.co',
+    publishableKey: 'sb_publishable_QV2_PAqU24FAIjwZUqtB3Q_KoyUkDnt',
+  );
 
   await configureDependencies();
 
