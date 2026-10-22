@@ -1,3 +1,4 @@
+import '../../../../core/config/supabase_config.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../models/patient_model.dart';
 
@@ -74,6 +75,40 @@ class PatientRemoteDataSourceImpl implements PatientRemoteDataSource {
     int page = 1,
     int limit = 10,
   }) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final fromIndex = (page - 1) * limit;
+        final toIndex = fromIndex + limit - 1;
+
+        final response = await client
+            .from('patients')
+            .select()
+            .order('registered_at', ascending: false)
+            .range(fromIndex, toIndex);
+
+        var list = (response as List<dynamic>)
+            .map((json) => PatientModel.fromJson(json as Map<String, dynamic>))
+            .toList();
+
+        if (query != null && query.isNotEmpty) {
+          final q = query.toLowerCase();
+          list = list
+              .where(
+                (p) =>
+                    p.name.toLowerCase().contains(q) ||
+                    p.email.toLowerCase().contains(q) ||
+                    p.phone.contains(q),
+              )
+              .toList();
+        }
+
+        return list;
+      } catch (_) {
+        // Fall back to mock
+      }
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     var res = _patients.toList();
 
@@ -94,6 +129,18 @@ class PatientRemoteDataSourceImpl implements PatientRemoteDataSource {
 
   @override
   Future<PatientModel> createPatient(PatientModel patient) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final response = await client
+            .from('patients')
+            .insert(patient.toSupabaseMap())
+            .select()
+            .single();
+        return PatientModel.fromJson(response);
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 400));
     final created = PatientModel(
       id: 'pat_${DateTime.now().millisecondsSinceEpoch}',
@@ -114,6 +161,19 @@ class PatientRemoteDataSourceImpl implements PatientRemoteDataSource {
 
   @override
   Future<PatientModel> updatePatient(PatientModel patient) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final response = await client
+            .from('patients')
+            .update(patient.toSupabaseMap())
+            .eq('id', patient.id)
+            .select()
+            .single();
+        return PatientModel.fromJson(response);
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 400));
     final idx = _patients.indexWhere((p) => p.id == patient.id);
     if (idx == -1) throw const AppException(message: 'Patient not found');
@@ -123,6 +183,14 @@ class PatientRemoteDataSourceImpl implements PatientRemoteDataSource {
 
   @override
   Future<bool> deletePatient(String id) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        await client.from('patients').delete().eq('id', id);
+        return true;
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     _patients.removeWhere((p) => p.id == id);
     return true;

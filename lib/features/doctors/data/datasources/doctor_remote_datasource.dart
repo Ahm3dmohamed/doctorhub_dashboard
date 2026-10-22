@@ -1,3 +1,4 @@
+import '../../../../core/config/supabase_config.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../models/doctor_model.dart';
 
@@ -166,6 +167,51 @@ class DoctorRemoteDataSourceImpl implements DoctorRemoteDataSource {
     int page = 1,
     int limit = 10,
   }) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        var queryBuilder = client.from('doctors').select();
+
+        if (specialtyFilter != null &&
+            specialtyFilter.isNotEmpty &&
+            specialtyFilter != 'All') {
+          queryBuilder = queryBuilder.eq('specialty', specialtyFilter);
+        }
+
+        if (availabilityFilter != null) {
+          queryBuilder = queryBuilder.eq('is_available', availabilityFilter);
+        }
+
+        final fromIndex = (page - 1) * limit;
+        final toIndex = fromIndex + limit - 1;
+
+        final response = await queryBuilder
+            .order('name', ascending: true)
+            .range(fromIndex, toIndex);
+
+        var list = (response as List<dynamic>)
+            .map((json) => DoctorModel.fromJson(json as Map<String, dynamic>))
+            .toList();
+
+        if (query != null && query.isNotEmpty) {
+          final q = query.toLowerCase();
+          list = list
+              .where(
+                (d) =>
+                    d.name.toLowerCase().contains(q) ||
+                    d.email.toLowerCase().contains(q) ||
+                    d.specialty.toLowerCase().contains(q) ||
+                    d.clinicName.toLowerCase().contains(q),
+              )
+              .toList();
+        }
+
+        return list;
+      } catch (e) {
+        // If Supabase query fails, fall back to mock data
+      }
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
 
     var filtered = _doctors.toList();
@@ -204,16 +250,40 @@ class DoctorRemoteDataSourceImpl implements DoctorRemoteDataSource {
 
   @override
   Future<DoctorModel> getDoctorById(String id) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final response = await client
+            .from('doctors')
+            .select()
+            .eq('id', id)
+            .single();
+        return DoctorModel.fromJson(response);
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 200));
     final doctor = _doctors.firstWhere(
       (d) => d.id == id,
-      orElse: () => throw const AppException(message: 'Patient not found'),
+      orElse: () => throw const AppException(message: 'Doctor not found'),
     );
     return doctor;
   }
 
   @override
   Future<DoctorModel> createDoctor(DoctorModel doctor) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final response = await client
+            .from('doctors')
+            .insert(doctor.toSupabaseMap())
+            .select()
+            .single();
+        return DoctorModel.fromJson(response);
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 400));
     final newDoctor = DoctorModel(
       id: 'doc_${DateTime.now().millisecondsSinceEpoch}',
@@ -235,15 +305,36 @@ class DoctorRemoteDataSourceImpl implements DoctorRemoteDataSource {
 
   @override
   Future<DoctorModel> updateDoctor(DoctorModel doctor) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final response = await client
+            .from('doctors')
+            .update(doctor.toSupabaseMap())
+            .eq('id', doctor.id)
+            .select()
+            .single();
+        return DoctorModel.fromJson(response);
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 400));
     final index = _doctors.indexWhere((d) => d.id == doctor.id);
-    if (index == -1) throw const AppException(message: 'Patient not found');
+    if (index == -1) throw const AppException(message: 'Doctor not found');
     _doctors[index] = doctor;
     return doctor;
   }
 
   @override
   Future<bool> deleteDoctor(String id) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        await client.from('doctors').delete().eq('id', id);
+        return true;
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     _doctors.removeWhere((d) => d.id == id);
     return true;

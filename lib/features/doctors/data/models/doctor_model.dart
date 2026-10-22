@@ -67,20 +67,57 @@ class DoctorModel extends DoctorEntity {
       id: json['id'] as String,
       name: json['name'] as String,
       email: json['email'] as String,
-      phone: json['phone'] as String,
+      phone: json['phone'] as String? ?? '',
       specialty: json['specialty'] as String,
-      clinicName: json['clinicName'] as String,
-      rating: (json['rating'] as num).toDouble(),
-      totalPatients: json['totalPatients'] as int,
-      yearsOfExperience: json['yearsOfExperience'] as int,
-      bio: json['bio'] as String,
-      isAvailable: json['isAvailable'] as bool? ?? true,
-      workingHours: (json['workingHours'] as List<dynamic>?)
-              ?.map((e) => WorkingHoursModel.fromJson(e as Map<String, dynamic>))
+      clinicName: (json['clinicName'] ?? json['clinic_name']) as String? ?? '',
+      rating: ((json['rating'] as num?) ?? 5.0).toDouble(),
+      totalPatients:
+          (json['totalPatients'] ?? json['total_patients'] as num?)?.toInt() ??
+          0,
+      yearsOfExperience:
+          (json['yearsOfExperience'] ?? json['years_of_experience'] as num?)
+              ?.toInt() ??
+          0,
+      bio: json['bio'] as String? ?? '',
+      isAvailable:
+          (json['isAvailable'] ?? json['is_available']) as bool? ?? true,
+      workingHours:
+          (json['workingHours'] ?? json['working_hours'] as List<dynamic>?)
+              ?.map(
+                (e) => WorkingHoursModel.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
-      avatarUrl: json['avatarUrl'] as String?,
+      avatarUrl: (json['avatarUrl'] ?? json['avatar_url']) as String?,
     );
+  }
+
+  Map<String, dynamic> toSupabaseMap() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'specialty': specialty,
+      'clinic_name': clinicName,
+      'rating': rating,
+      'total_patients': totalPatients,
+      'years_of_experience': yearsOfExperience,
+      'bio': bio,
+      'is_available': isAvailable,
+      'working_hours': workingHours.map((e) {
+        final m = e is WorkingHoursModel
+            ? e
+            : WorkingHoursModel(
+                day: e.day,
+                startTime: e.startTime,
+                endTime: e.endTime,
+                isAvailable: e.isAvailable,
+              );
+        return m.toJson();
+      }).toList(),
+      'avatar_url': avatarUrl,
+    };
   }
 
   Map<String, dynamic> toJson() {

@@ -16,10 +16,10 @@ class EmergencyContactModel extends EmergencyContact {
   }
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'relation': relation,
-        'phone': phone,
-      };
+    'name': name,
+    'relation': relation,
+    'phone': phone,
+  };
 }
 
 class PatientModel extends PatientEntity {
@@ -57,17 +57,59 @@ class PatientModel extends PatientEntity {
     return PatientModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      age: json['age'] as int,
-      gender: json['gender'] as String,
-      bloodGroup: json['bloodGroup'] as String,
-      emergencyContact: EmergencyContactModel.fromJson(
-          json['emergencyContact'] as Map<String, dynamic>),
-      medicalHistory: json['medicalHistory'] as String,
-      allergies: json['allergies'] as String,
-      registeredAt: DateTime.parse(json['registeredAt'] as String),
+      email: json['email'] as String? ?? '',
+      phone: json['phone'] as String? ?? '',
+      age: (json['age'] as num?)?.toInt() ?? 0,
+      gender: json['gender'] as String? ?? 'Other',
+      bloodGroup:
+          (json['bloodGroup'] ?? json['blood_group']) as String? ?? 'O+',
+      emergencyContact: json['emergencyContact'] != null
+          ? EmergencyContactModel.fromJson(
+              json['emergencyContact'] as Map<String, dynamic>,
+            )
+          : (json['emergency_contact'] != null
+                ? EmergencyContactModel.fromJson(
+                    json['emergency_contact'] as Map<String, dynamic>,
+                  )
+                : const EmergencyContactModel(
+                    name: '',
+                    relation: '',
+                    phone: '',
+                  )),
+      medicalHistory:
+          (json['medicalHistory'] ?? json['medical_history']) as String? ?? '',
+      allergies: json['allergies'] as String? ?? '',
+      registeredAt: json['registeredAt'] != null
+          ? DateTime.parse(json['registeredAt'] as String)
+          : (json['registered_at'] != null
+                ? DateTime.parse(json['registered_at'] as String)
+                : DateTime.now()),
     );
+  }
+
+  Map<String, dynamic> toSupabaseMap() {
+    final contact = emergencyContact;
+    final contactModel = contact is EmergencyContactModel
+        ? contact
+        : EmergencyContactModel(
+            name: contact.name,
+            relation: contact.relation,
+            phone: contact.phone,
+          );
+
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'age': age,
+      'gender': gender,
+      'blood_group': bloodGroup,
+      'emergency_contact': contactModel.toJson(),
+      'medical_history': medicalHistory,
+      'allergies': allergies,
+      'registered_at': registeredAt.toIso8601String(),
+    };
   }
 
   Map<String, dynamic> toJson() {
