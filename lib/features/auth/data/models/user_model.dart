@@ -17,14 +17,14 @@ class UserModel extends UserEntity {
     super.isActive,
   });
 
-  /// Create from JSON (API response)
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  /// Create from JSON (API response or cache)
+  factory UserModel.fromJson(Map<String, dynamic> json, {String? token}) {
     return UserModel(
       id: json['id'] as String,
       name: json['name'] as String,
       email: json['email'] as String,
       role: _parseRole(json['role'] as String?),
-      token: json['token'] as String,
+      token: token ?? (json['token'] as String?) ?? '',
       avatarUrl: json['avatar_url'] as String?,
       specialty: json['specialty'] as String?,
       clinicId: json['clinic_id'] as String?,
@@ -35,19 +35,41 @@ class UserModel extends UserEntity {
     );
   }
 
+  /// Factory specifically for Supabase `profiles` table records
+  factory UserModel.fromSupabase(Map<String, dynamic> json, {String? token}) {
+    return UserModel.fromJson(json, token: token);
+  }
+
+  /// Convert to Supabase `profiles` table format
+  Map<String, dynamic> toSupabaseMap() => {
+    'id': id,
+    'name': name,
+    'email': email,
+    'role': switch (role) {
+      UserRole.superAdmin => 'super_admin',
+      UserRole.doctor => 'doctor',
+      UserRole.clinicManager => 'clinic_manager',
+    },
+    'avatar_url': avatarUrl,
+    'specialty': specialty,
+    'clinic_id': clinicId,
+    'last_login_at': lastLoginAt?.toIso8601String(),
+    'is_active': isActive,
+  };
+
   /// Convert to JSON (for caching)
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'email': email,
-        'role': role.name,
-        'token': token,
-        'avatar_url': avatarUrl,
-        'specialty': specialty,
-        'clinic_id': clinicId,
-        'last_login_at': lastLoginAt?.toIso8601String(),
-        'is_active': isActive,
-      };
+    'id': id,
+    'name': name,
+    'email': email,
+    'role': role.name,
+    'token': token,
+    'avatar_url': avatarUrl,
+    'specialty': specialty,
+    'clinic_id': clinicId,
+    'last_login_at': lastLoginAt?.toIso8601String(),
+    'is_active': isActive,
+  };
 
   String toJsonString() => jsonEncode(toJson());
 
@@ -56,17 +78,17 @@ class UserModel extends UserEntity {
 
   /// Create from domain entity
   factory UserModel.fromEntity(UserEntity entity) => UserModel(
-        id: entity.id,
-        name: entity.name,
-        email: entity.email,
-        role: entity.role,
-        token: entity.token,
-        avatarUrl: entity.avatarUrl,
-        specialty: entity.specialty,
-        clinicId: entity.clinicId,
-        lastLoginAt: entity.lastLoginAt,
-        isActive: entity.isActive,
-      );
+    id: entity.id,
+    name: entity.name,
+    email: entity.email,
+    role: entity.role,
+    token: entity.token,
+    avatarUrl: entity.avatarUrl,
+    specialty: entity.specialty,
+    clinicId: entity.clinicId,
+    lastLoginAt: entity.lastLoginAt,
+    isActive: entity.isActive,
+  );
 
   static UserRole _parseRole(String? role) {
     return switch (role?.toLowerCase()) {

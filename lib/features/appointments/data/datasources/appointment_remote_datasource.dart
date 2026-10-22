@@ -1,3 +1,4 @@
+import '../../../../core/config/supabase_config.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../domain/entities/appointment_entity.dart';
 import '../models/appointment_model.dart';
@@ -88,6 +89,45 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
     int page = 1,
     int limit = 10,
   }) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        var queryBuilder = client.from('appointments').select();
+
+        if (statusFilter != null) {
+          queryBuilder = queryBuilder.eq('status', statusFilter.name);
+        }
+
+        final fromIndex = (page - 1) * limit;
+        final toIndex = fromIndex + limit - 1;
+
+        final response = await queryBuilder
+            .order('date_time', ascending: false)
+            .range(fromIndex, toIndex);
+
+        var list = (response as List<dynamic>)
+            .map(
+              (json) => AppointmentModel.fromJson(json as Map<String, dynamic>),
+            )
+            .toList();
+
+        if (query != null && query.isNotEmpty) {
+          final q = query.toLowerCase();
+          list = list
+              .where(
+                (a) =>
+                    a.patientName.toLowerCase().contains(q) ||
+                    a.doctorName.toLowerCase().contains(q) ||
+                    a.specialty.toLowerCase().contains(q) ||
+                    a.clinicName.toLowerCase().contains(q),
+              )
+              .toList();
+        }
+
+        return list;
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     var results = _appointments.toList();
 
@@ -115,6 +155,18 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
   Future<AppointmentModel> createAppointment(
     AppointmentModel appointment,
   ) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final response = await client
+            .from('appointments')
+            .insert(appointment.toSupabaseMap())
+            .select()
+            .single();
+        return AppointmentModel.fromJson(response);
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 400));
     final created = AppointmentModel(
       id: 'apt_${DateTime.now().millisecondsSinceEpoch}',
@@ -136,6 +188,19 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
     String id,
     AppointmentStatus status,
   ) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final response = await client
+            .from('appointments')
+            .update({'status': status.name})
+            .eq('id', id)
+            .select()
+            .single();
+        return AppointmentModel.fromJson(response);
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     final idx = _appointments.indexWhere((a) => a.id == id);
     if (idx == -1) {
@@ -148,6 +213,22 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
 
   @override
   Future<AppointmentModel> reschedule(String id, DateTime newDateTime) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        final response = await client
+            .from('appointments')
+            .update({
+              'date_time': newDateTime.toIso8601String(),
+              'status': AppointmentStatus.upcoming.name,
+            })
+            .eq('id', id)
+            .select()
+            .single();
+        return AppointmentModel.fromJson(response);
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     final idx = _appointments.indexWhere((a) => a.id == id);
     if (idx == -1) {
@@ -163,6 +244,14 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
 
   @override
   Future<bool> deleteAppointment(String id) async {
+    if (SupabaseConfig.isInitialized) {
+      try {
+        final client = SupabaseConfig.client;
+        await client.from('appointments').delete().eq('id', id);
+        return true;
+      } catch (_) {}
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     _appointments.removeWhere((a) => a.id == id);
     return true;

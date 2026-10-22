@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/config/supabase_config.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
@@ -109,6 +110,36 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, UserEntity?>> getCachedUser() async {
     try {
+      // 1. Check Supabase session first if initialized
+      if (SupabaseConfig.isInitialized) {
+        final session = SupabaseConfig.client.auth.currentSession;
+        final user = SupabaseConfig.client.auth.currentUser;
+
+        if (session != null && user != null && !session.isExpired) {
+          // Check local prefs for rapid UI rendering
+          final userJson = _prefs.getString(AppConstants.keyUser);
+          if (userJson != null) {
+            try {
+              final cached = UserModel.fromJsonString(userJson);
+              if (cached.id == user.id) {
+                return Right(cached);
+              }
+            } catch (_) {}
+          }
+
+          // Fetch fresh profile from Supabase
+          final freshUser = await _remoteDataSource.getUserProfile(
+            user.id,
+            token: session.accessToken,
+          );
+          if (freshUser != null) {
+            await _cacheUser(freshUser);
+            return Right(freshUser);
+          }
+        }
+      }
+
+      // 2. Fall back to local preferences cache
       final userJson = _prefs.getString(AppConstants.keyUser);
       if (userJson == null) return const Right(null);
 
@@ -124,6 +155,13 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, bool>> isAuthenticated() async {
     try {
+      if (SupabaseConfig.isInitialized) {
+        final session = SupabaseConfig.client.auth.currentSession;
+        if (session != null && !session.isExpired) {
+          return const Right(true);
+        }
+      }
+
       final token = _prefs.getString(AppConstants.keyAuthToken);
       return Right(token != null && token.isNotEmpty);
     } catch (e) {
