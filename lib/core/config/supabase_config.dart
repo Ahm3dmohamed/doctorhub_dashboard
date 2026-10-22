@@ -72,11 +72,10 @@ abstract class SupabaseConfig {
     if (!isConfigured) {
       if (kDebugMode) {
         debugPrint(
-          '[DoctorHub Supabase] No valid SUPABASE_URL and SUPABASE_ANON_KEY detected.\n'
-          '[DoctorHub Supabase] Running in development fallback mode with mock data.\n'
-          '[DoctorHub Supabase] To connect to Supabase, provide credentials via --dart-define:\n'
-          '  --dart-define=SUPABASE_URL=https://<your-project>.supabase.co\n'
-          '  --dart-define=SUPABASE_ANON_KEY=<your-anon-key>',
+          '[DoctorHub] Running in Development Mode (Mock Data Active).\n'
+          '[DoctorHub] To connect to a live Supabase project, add your keys in supabase_env.json and run:\n'
+          '  flutter run --dart-define-from-file=supabase_env.json\n'
+          '  or launch "DoctorHub (Supabase Live)" from VS Code / IDE.',
         );
       }
       return false;
