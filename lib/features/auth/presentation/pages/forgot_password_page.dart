@@ -124,26 +124,29 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap: () => context.go(AppRoutes.login),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        isRtl
-                            ? Icons.arrow_forward_rounded
-                            : Icons.arrow_back_rounded,
-                        size: 16,
-                        color: AppColors.darkTextSecondary,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        l10n.authBackToLogin,
-                        style: AppTypography.bodySm(
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () => context.go(AppRoutes.login),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          isRtl
+                              ? Icons.arrow_forward_rounded
+                              : Icons.arrow_back_rounded,
+                          size: 16,
                           color: AppColors.darkTextSecondary,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 6),
+                        Text(
+                          l10n.authBackToLogin,
+                          style: AppTypography.bodySm(
+                            color: AppColors.darkTextSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 

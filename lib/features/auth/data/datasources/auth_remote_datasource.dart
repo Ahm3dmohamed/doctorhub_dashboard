@@ -143,7 +143,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     await Future.delayed(AppConstants.mockApiDelay);
 
     final mockUser = _mockUsers[normalizedEmail];
-    if (mockUser == null || mockUser.password != password) {
+    final isPasswordValid =
+        mockUser != null &&
+        (mockUser.password == password ||
+            mockUser.password.replaceAll('@', '') == password ||
+            mockUser.password.toLowerCase() == password.toLowerCase() ||
+            mockUser.password.replaceAll('@', '').toLowerCase() ==
+                password.toLowerCase());
+
+    if (mockUser == null || !isPasswordValid) {
       throw const app_ex.InvalidCredentialsException();
     }
 

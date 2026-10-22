@@ -17,26 +17,31 @@ class RememberMeCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return GestureDetector(
-      onTap: onChanged != null ? () => onChanged!(!value) : null,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: Checkbox(
-              value: value,
-              onChanged: onChanged,
-              visualDensity: VisualDensity.compact,
+    return MouseRegion(
+      cursor: onChanged != null
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
+      child: GestureDetector(
+        onTap: onChanged != null ? () => onChanged!(!value) : null,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: Checkbox(
+                value: value,
+                onChanged: onChanged,
+                visualDensity: VisualDensity.compact,
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            l10n.authRememberMe,
-            style: AppTypography.bodySm(color: AppColors.darkTextSecondary),
-          ),
-        ],
+            const SizedBox(width: 8),
+            Text(
+              l10n.authRememberMe,
+              style: AppTypography.bodySm(color: AppColors.darkTextSecondary),
+            ),
+          ],
+        ),
       ),
     );
   }

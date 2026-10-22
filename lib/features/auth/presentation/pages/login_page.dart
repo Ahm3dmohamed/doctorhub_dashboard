@@ -21,8 +21,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
-  String? errorMessage;
-
   late final AnimationController _fadeController;
   late final AnimationController _slideController;
   late final Animation<double> _fadeAnimation;
@@ -64,8 +62,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       listener: (context, state) {
         if (state is AuthAuthenticated) {
           context.go(AppRoutes.dashboard);
-        } else if (state is AuthError) {
-          setState(() => errorMessage = state.message);
         }
       },
       child: Scaffold(
